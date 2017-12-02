@@ -5,15 +5,15 @@ import (
 	"sync"
 	"time"
 
-	"github.com/OpenBazaar/openbazaar-go/api/notifications"
-	"github.com/OpenBazaar/openbazaar-go/core"
-	"github.com/OpenBazaar/openbazaar-go/pb"
-	"github.com/OpenBazaar/openbazaar-go/repo"
 	"github.com/OpenBazaar/wallet-interface"
 	"github.com/btcsuite/btcd/chaincfg/chainhash"
 	"github.com/golang/protobuf/proto"
 	"github.com/golang/protobuf/ptypes"
 	"github.com/op/go-logging"
+	"github.com/phoreproject/openbazaar-go/api/notifications"
+	"github.com/phoreproject/openbazaar-go/core"
+	"github.com/phoreproject/openbazaar-go/pb"
+	"github.com/phoreproject/openbazaar-go/repo"
 )
 
 var log = logging.MustGetLogger("transaction-listener")
@@ -71,7 +71,7 @@ func (l *TransactionListener) OnTransactionReceived(cb wallet.TransactionCallbac
 			continue
 		}
 
-		orderId, err := calcOrderId(contract.BuyerOrder)
+		orderId, err := calcOrderID(contract.BuyerOrder)
 		if err != nil {
 			continue
 		}
@@ -174,7 +174,7 @@ func (l *TransactionListener) processSalePayment(txid []byte, output wallet.Tran
 			return
 		}
 	}
-	orderId, err := calcOrderId(contract.BuyerOrder)
+	orderId, err := calcOrderID(contract.BuyerOrder)
 	if err != nil {
 		return
 	}
@@ -244,7 +244,7 @@ func (l *TransactionListener) processPurchasePayment(txid []byte, output wallet.
 			return
 		}
 	}
-	orderId, err := calcOrderId(contract.BuyerOrder)
+	orderId, err := calcOrderID(contract.BuyerOrder)
 	if err != nil {
 		return
 	}
@@ -302,7 +302,7 @@ func (l *TransactionListener) adjustInventory(contract *pb.RicardianContract) {
 			newCount = 0
 		}
 		if (c == 0) || (c > 0 && c-q < 0) {
-			orderId, err := calcOrderId(contract.BuyerOrder)
+			orderId, err := calcOrderID(contract.BuyerOrder)
 			if err != nil {
 				continue
 			}
@@ -316,7 +316,7 @@ func (l *TransactionListener) adjustInventory(contract *pb.RicardianContract) {
 	}
 }
 
-func calcOrderId(order *pb.Order) (string, error) {
+func calcOrderID(order *pb.Order) (string, error) {
 	ser, err := proto.Marshal(order)
 	if err != nil {
 		return "", err

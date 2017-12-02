@@ -8,17 +8,20 @@ import (
 	"time"
 )
 
+// Notification is a single notification to send a user.
 type Notification struct {
 	Data      Data      `json:"notification"`
 	Timestamp time.Time `json:"timestamp"`
 	Read      bool      `json:"read"`
 }
 
+// Thumbnail is URLs to a thumbnail for some notifications
 type Thumbnail struct {
 	Tiny  string `json:"tiny"`
 	Small string `json:"small"`
 }
 
+// Data is the actual data used for a notification.
 type Data interface {
 	// TODO maybe should be made 'real interface', which will allow
 	// to use typed channels, type checking and semantic dispatching
@@ -48,6 +51,7 @@ type messageTypingWrapper struct {
 	MessageRead Data `json:"messageTyping"`
 }
 
+// OrderNotification is sent when a user orders an item.
 type OrderNotification struct {
 	ID          string    `json:"notificationId"`
 	Type        string    `json:"type"`
@@ -55,75 +59,83 @@ type OrderNotification struct {
 	BuyerID     string    `json:"buyerId"`
 	BuyerHandle string    `json:"buyerHandle"`
 	Thumbnail   Thumbnail `json:"thumbnail"`
-	OrderId     string    `json:"orderId"`
+	OrderID     string    `json:"orderId"`
 	Slug        string    `json:"slug"`
 }
 
+// PaymentNotification is sent when a user pays for an item.
 type PaymentNotification struct {
 	ID           string `json:"notificationId"`
 	Type         string `json:"type"`
-	OrderId      string `json:"orderId"`
+	OrderID      string `json:"orderId"`
 	FundingTotal uint64 `json:"fundingTotal"`
 }
 
+// OrderConfirmationNotification is sent when an order is confirmed.
 type OrderConfirmationNotification struct {
 	ID           string    `json:"notificationId"`
 	Type         string    `json:"type"`
-	OrderId      string    `json:"orderId"`
+	OrderID      string    `json:"orderId"`
 	Thumbnail    Thumbnail `json:"thumbnail"`
 	VendorHandle string    `json:"vendorHandle"`
 	VendorID     string    `json:"vendorId"`
 }
 
+// OrderDeclinedNotification is sent when an order is declined.
 type OrderDeclinedNotification struct {
 	ID           string    `json:"notificationId"`
 	Type         string    `json:"type"`
-	OrderId      string    `json:"orderId"`
+	OrderID      string    `json:"orderId"`
 	Thumbnail    Thumbnail `json:"thumbnail"`
 	VendorHandle string    `json:"vendorHandle"`
 	VendorID     string    `json:"vendorId"`
 }
 
+// OrderCancelNotification is sent when a user cancels their order.
 type OrderCancelNotification struct {
 	ID          string    `json:"notificationId"`
 	Type        string    `json:"type"`
-	OrderId     string    `json:"orderId"`
+	OrderID     string    `json:"orderId"`
 	Thumbnail   Thumbnail `json:"thumbnail"`
 	BuyerHandle string    `json:"buyerHandle"`
 	BuyerID     string    `json:"buyerId"`
 }
 
+// RefundNotification is sent when an order is refunded.
 type RefundNotification struct {
 	ID           string    `json:"notificationId"`
 	Type         string    `json:"type"`
-	OrderId      string    `json:"orderId"`
+	OrderID      string    `json:"orderId"`
 	Thumbnail    Thumbnail `json:"thumbnail"`
 	VendorHandle string    `json:"vendorHandle"`
 	VendorID     string    `json:"vendorId"`
 }
 
+// FulfillmentNotification is sent when an order is fulfilled
 type FulfillmentNotification struct {
 	ID           string    `json:"notificationId"`
 	Type         string    `json:"type"`
-	OrderId      string    `json:"orderId"`
+	OrderID      string    `json:"orderId"`
 	Thumbnail    Thumbnail `json:"thumbnail"`
 	VendorHandle string    `json:"vendorHandle"`
 	VendorID     string    `json:"vendorId"`
 }
 
+// CompletionNotification is sent when an order is completed.
 type CompletionNotification struct {
 	ID          string    `json:"notificationId"`
 	Type        string    `json:"type"`
-	OrderId     string    `json:"orderId"`
+	OrderID     string    `json:"orderId"`
 	Thumbnail   Thumbnail `json:"thumbnail"`
 	BuyerHandle string    `json:"buyerHandle"`
 	BuyerID     string    `json:"buyerId"`
 }
 
+// DisputeOpenNotification is sent when an order is disputed.
 type DisputeOpenNotification struct {
 	ID             string    `json:"notificationId"`
 	Type           string    `json:"type"`
-	OrderId        string    `json:"orderId"`
+	OrderID        string    `json:"orderId"`
 	Thumbnail      Thumbnail `json:"thumbnail"`
 	DisputerID     string    `json:"disputerId"`
 	DisputerHandle string    `json:"disputerHandle"`
@@ -132,10 +144,11 @@ type DisputeOpenNotification struct {
 	Buyer          string    `json:"buyer"`
 }
 
+// DisputeUpdateNotification is sent when a dispute is updated.
 type DisputeUpdateNotification struct {
 	ID             string    `json:"notificationId"`
 	Type           string    `json:"type"`
-	OrderId        string    `json:"orderId"`
+	OrderID        string    `json:"orderId"`
 	Thumbnail      Thumbnail `json:"thumbnail"`
 	DisputerID     string    `json:"disputerId"`
 	DisputerHandle string    `json:"disputerHandle"`
@@ -144,73 +157,84 @@ type DisputeUpdateNotification struct {
 	Buyer          string    `json:"buyer"`
 }
 
+// DisputeCloseNotification is sent when a dispute is closed.
 type DisputeCloseNotification struct {
 	ID               string    `json:"notificationId"`
 	Type             string    `json:"type"`
-	OrderId          string    `json:"orderId"`
+	OrderID          string    `json:"orderId"`
 	Thumbnail        Thumbnail `json:"thumbnail"`
 	OtherPartyID     string    `json:"otherPartyId"`
 	OtherPartyHandle string    `json:"otherPartyHandle"`
 	Buyer            string    `json:"buyer"`
 }
 
+// DisputeAcceptedNotification is sent when a dispute is accepted.
 type DisputeAcceptedNotification struct {
 	ID               string    `json:"notificationId"`
 	Type             string    `json:"type"`
-	OrderId          string    `json:"orderId"`
+	OrderID          string    `json:"orderId"`
 	Thumbnail        Thumbnail `json:"thumbnail"`
-	OherPartyID      string    `json:"otherPartyId"`
+	OtherPartyID     string    `json:"otherPartyId"`
 	OtherPartyHandle string    `json:"otherPartyHandle"`
 	Buyer            string    `json:"buyer"`
 }
 
+// FollowNotification is sent when a user follows you.
 type FollowNotification struct {
 	ID     string `json:"notificationId"`
 	Type   string `json:"type"`
-	PeerId string `json:"peerId"`
+	PeerID string `json:"peerId"`
 }
 
+// UnfollowNotification is sent when a user unfollows you.
 type UnfollowNotification struct {
 	ID     string `json:"notificationId"`
 	Type   string `json:"type"`
-	PeerId string `json:"peerId"`
+	PeerID string `json:"peerId"`
 }
 
+// ModeratorAddNotification is sent when a moderator is added.
 type ModeratorAddNotification struct {
 	ID     string `json:"notificationId"`
 	Type   string `json:"type"`
-	PeerId string `json:"peerId"`
+	PeerID string `json:"peerId"`
 }
 
+// ModeratorRemoveNotification is sent when a moderator is removed.
 type ModeratorRemoveNotification struct {
 	ID     string `json:"notificationId"`
 	Type   string `json:"type"`
-	PeerId string `json:"peerId"`
+	PeerID string `json:"peerId"`
 }
 
+// StatusNotification is sent when the status changes.
 type StatusNotification struct {
 	Status string `json:"status"`
 }
 
+// ChatMessage is sent when you receive a chat message.
 type ChatMessage struct {
-	MessageId string    `json:"messageId"`
-	PeerId    string    `json:"peerId"`
+	MessageID string    `json:"messageId"`
+	PeerID    string    `json:"peerId"`
 	Subject   string    `json:"subject"`
 	Message   string    `json:"message"`
 	Timestamp time.Time `json:"timestamp"`
 }
 
+// ChatRead is sent when someone reads a chat message.
 type ChatRead struct {
-	MessageId string `json:"messageId"`
-	PeerId    string `json:"peerId"`
+	MessageID string `json:"messageId"`
+	PeerID    string `json:"peerId"`
 	Subject   string `json:"subject"`
 }
 
+// ChatTyping is sent when someone in a chat starts typing
 type ChatTyping struct {
-	PeerId  string `json:"peerId"`
+	PeerID  string `json:"peerId"`
 	Subject string `json:"subject"`
 }
 
+// IncomingTransaction is sent when you receive a new transaction
 type IncomingTransaction struct {
 	Txid          string    `json:"txid"`
 	Value         int64     `json:"value"`
@@ -219,20 +243,22 @@ type IncomingTransaction struct {
 	Memo          string    `json:"memo"`
 	Timestamp     time.Time `json:"timestamp"`
 	Confirmations int32     `json:"confirmations"`
-	OrderId       string    `json:"orderId"`
+	OrderID       string    `json:"orderId"`
 	Thumbnail     string    `json:"thumbnail"`
 	Height        int32     `json:"height"`
 	CanBumpFee    bool      `json:"canBumpFee"`
 }
 
+// TestNotification does nothing.
 type TestNotification struct{}
 
+// NewID generates a new unique ID.
 func NewID() string {
 	b := make([]byte, 32)
 	rand.Read(b)
 	encoded, _ := mh.Encode(b, mh.SHA2_256)
-	nId, _ := mh.Cast(encoded)
-	return nId.B58String()
+	nID, _ := mh.Cast(encoded)
+	return nID.B58String()
 }
 
 func wrap(i interface{}) interface{} {
@@ -310,6 +336,7 @@ func wrap(i interface{}) interface{} {
 	}
 }
 
+// Serialize serializes a notification.
 func Serialize(i interface{}) []byte {
 	w := wrap(i)
 	if _, ok := w.([]byte); ok {
@@ -319,6 +346,7 @@ func Serialize(i interface{}) []byte {
 	return b
 }
 
+// Describe prints a notification
 func Describe(i interface{}) (string, string) {
 	var head, body string
 	switch i.(type) {
@@ -333,70 +361,70 @@ func Describe(i interface{}) (string, string) {
 			buyer = n.BuyerID
 		}
 		form := "You received an order \"%s\".\n\nOrder ID: %s\nBuyer: %s\nThumbnail: %s\n"
-		body = fmt.Sprintf(form, n.Title, n.OrderId, buyer, n.Thumbnail.Small)
+		body = fmt.Sprintf(form, n.Title, n.OrderID, buyer, n.Thumbnail.Small)
 
 	case PaymentNotification:
 		head = "Payment received"
 
 		n := i.(PaymentNotification)
 		form := "Payment for order \"%s\" received (total %d)."
-		body = fmt.Sprintf(form, n.OrderId, n.FundingTotal)
+		body = fmt.Sprintf(form, n.OrderID, n.FundingTotal)
 
 	case OrderConfirmationNotification:
 		head = "Order confirmed"
 
 		n := i.(OrderConfirmationNotification)
 		form := "Order \"%s\" has been confirmed."
-		body = fmt.Sprintf(form, n.OrderId)
+		body = fmt.Sprintf(form, n.OrderID)
 
 	case OrderCancelNotification:
 		head = "Order cancelled"
 
 		n := i.(OrderCancelNotification)
 		form := "Order \"%s\" has been cancelled."
-		body = fmt.Sprintf(form, n.OrderId)
+		body = fmt.Sprintf(form, n.OrderID)
 
 	case RefundNotification:
 		head = "Payment refunded"
 
 		n := i.(RefundNotification)
 		form := "Payment refund for order \"%s\" received."
-		body = fmt.Sprintf(form, n.OrderId)
+		body = fmt.Sprintf(form, n.OrderID)
 
 	case FulfillmentNotification:
 		head = "Order fulfilled"
 
 		n := i.(FulfillmentNotification)
 		form := "Order \"%s\" was marked as fulfilled."
-		body = fmt.Sprintf(form, n.OrderId)
+		body = fmt.Sprintf(form, n.OrderID)
 
 	case CompletionNotification:
 		head = "Order completed"
 
 		n := i.(CompletionNotification)
 		form := "Order \"%s\" was marked as completed."
-		body = fmt.Sprintf(form, n.OrderId)
+		body = fmt.Sprintf(form, n.OrderID)
 
 	case DisputeOpenNotification:
 		head = "Dispute opened"
 
 		n := i.(DisputeOpenNotification)
 		form := "Dispute around order \"%s\" was opened."
-		body = fmt.Sprintf(form, n.OrderId)
+		body = fmt.Sprintf(form, n.OrderID)
 
 	case DisputeUpdateNotification:
 		head = "Dispute updated"
 
 		n := i.(DisputeUpdateNotification)
 		form := "Dispute around order \"%s\" was updated."
-		body = fmt.Sprintf(form, n.OrderId)
+		body = fmt.Sprintf(form, n.OrderID)
 
 	case DisputeCloseNotification:
 		head = "Dispute closed"
 
 		n := i.(DisputeCloseNotification)
 		form := "Dispute around order \"%s\" was closed."
-		body = fmt.Sprintf(form, n.OrderId)
+		body = fmt.Sprintf(form, n.OrderID)
 
 	case TestNotification:
 		head = "SMTP Notification Test"

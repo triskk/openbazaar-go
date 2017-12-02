@@ -8,9 +8,10 @@ import (
 	"os"
 	"path"
 
-	"github.com/OpenBazaar/openbazaar-go/ipfs"
-	"github.com/ipfs/go-ipfs/commands"
 	"gx/ipfs/QmNp85zy9RLrQ5oQD4hPyS39ezrrXpcaa7R4Y9kxdWQLLQ/go-cid"
+
+	"github.com/ipfs/go-ipfs/commands"
+	"github.com/phoreproject/openbazaar-go/ipfs"
 )
 
 type SelfHostedStorage struct {

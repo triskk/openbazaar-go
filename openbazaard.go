@@ -2,14 +2,15 @@ package main
 
 import (
 	"fmt"
-	"github.com/OpenBazaar/openbazaar-go/cmd"
-	"github.com/OpenBazaar/openbazaar-go/core"
-	lockfile "github.com/ipfs/go-ipfs/repo/fsrepo/lock"
-	"github.com/jessevdk/go-flags"
-	"github.com/op/go-logging"
 	"os"
 	"os/signal"
 	"path/filepath"
+
+	lockfile "github.com/ipfs/go-ipfs/repo/fsrepo/lock"
+	"github.com/jessevdk/go-flags"
+	"github.com/op/go-logging"
+	"github.com/phoreproject/openbazaar-go/cmd"
+	"github.com/phoreproject/openbazaar-go/core"
 )
 
 var log = logging.MustGetLogger("main")

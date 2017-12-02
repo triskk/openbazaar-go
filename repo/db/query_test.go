@@ -1,7 +1,7 @@
 package db
 
 import (
-	"github.com/OpenBazaar/openbazaar-go/pb"
+	"github.com/phoreproject/openbazaar-go/pb"
 	"testing"
 )
 

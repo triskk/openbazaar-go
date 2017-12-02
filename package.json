@@ -6,7 +6,7 @@
   "language": "english",
   "license": "",
   "bugs": {
-    "url": "https://github.com/OpenBazaar/openbazaar-go"
+    "url": "https://github.com/phoreproject/openbazaar-go"
   },
   "gxVersion": "0.11.0"
 }

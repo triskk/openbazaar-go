@@ -9,10 +9,10 @@ Issues should be used primarily for bug reports and directly actionable features
 ## Go Guidelines
 You must run `gofmt` before each commit. Travis will fail if you do not run it. Most IDEs have the ability to set `gofmt` to run on save or at specified times.
 
-Additionally, we like to keep the [Go Report Card](https://goreportcard.com/report/github.com/OpenBazaar/openbazaar-go) score at A or better. So keep those other tests in mind when you commit.
+Additionally, we like to keep the [Go Report Card](https://goreportcard.com/report/github.com/phoreproject/openbazaar-go) score at A or better. So keep those other tests in mind when you commit.
 
 ## Tests
-If you add new code, please submit a unit test with it. We might not accept the PR without it. Additionally, you are expected to make the appropriate changes to existing tests if they are affected by your commits. This also includes the integration tests in the [qa package](https://github.com/OpenBazaar/openbazaar-go/tree/master/qa).
+If you add new code, please submit a unit test with it. We might not accept the PR without it. Additionally, you are expected to make the appropriate changes to existing tests if they are affected by your commits. This also includes the integration tests in the [qa package](https://github.com/phoreproject/openbazaar-go/tree/master/qa).
 
 ## Pull Requests
 If your PR isn't ready to merge make sure you specify this somehow. For example by placing [WIP] in the PR title. Ideally you should include a `task list` in the PR message to track the progress of the PR.

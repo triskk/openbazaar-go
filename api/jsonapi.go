@@ -30,11 +30,6 @@ import (
 	"io/ioutil"
 
 	"github.com/OpenBazaar/jsonpb"
-	"github.com/OpenBazaar/openbazaar-go/api/notifications"
-	"github.com/OpenBazaar/openbazaar-go/core"
-	"github.com/OpenBazaar/openbazaar-go/ipfs"
-	"github.com/OpenBazaar/openbazaar-go/pb"
-	"github.com/OpenBazaar/openbazaar-go/repo"
 	"github.com/OpenBazaar/spvwallet"
 	"github.com/OpenBazaar/wallet-interface"
 	"github.com/btcsuite/btcd/chaincfg"
@@ -45,9 +40,15 @@ import (
 	"github.com/ipfs/go-ipfs/core/coreunix"
 	ipnspath "github.com/ipfs/go-ipfs/path"
 	lockfile "github.com/ipfs/go-ipfs/repo/fsrepo/lock"
+	"github.com/phoreproject/openbazaar-go/api/notifications"
+	"github.com/phoreproject/openbazaar-go/core"
+	"github.com/phoreproject/openbazaar-go/ipfs"
+	"github.com/phoreproject/openbazaar-go/pb"
+	"github.com/phoreproject/openbazaar-go/repo"
 )
 
-type JsonAPIConfig struct {
+// JSONAPIConfig stores information about the configuration of the API
+type JSONAPIConfig struct {
 	Headers       map[string]interface{}
 	Enabled       bool
 	Cors          *string
@@ -59,17 +60,17 @@ type JsonAPIConfig struct {
 }
 
 type jsonAPIHandler struct {
-	config JsonAPIConfig
+	config JSONAPIConfig
 	node   *core.OpenBazaarNode
 }
 
-func newJsonAPIHandler(node *core.OpenBazaarNode, authCookie http.Cookie, config repo.APIConfig) (*jsonAPIHandler, error) {
+func newJSONAPIHandler(node *core.OpenBazaarNode, authCookie http.Cookie, config repo.APIConfig) (*jsonAPIHandler, error) {
 	allowedIPs := make(map[string]bool)
 	for _, ip := range config.AllowedIPs {
 		allowedIPs[ip] = true
 	}
 	i := &jsonAPIHandler{
-		config: JsonAPIConfig{
+		config: JSONAPIConfig{
 			Enabled:       config.Enabled,
 			Cors:          config.CORS,
 			Headers:       config.HTTPHeaders,
@@ -180,18 +181,20 @@ func (i *jsonAPIHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
+// ErrorResponse responds with an error code
 func ErrorResponse(w http.ResponseWriter, errorCode int, reason string) {
-	type ApiError struct {
+	type APIError struct {
 		Success bool   `json:"success"`
 		Reason  string `json:"reason"`
 	}
 	reason = strings.Replace(reason, `"`, `'`, -1)
-	err := ApiError{false, reason}
+	err := APIError{false, reason}
 	resp, _ := json.MarshalIndent(err, "", "    ")
 	w.WriteHeader(errorCode)
 	fmt.Fprint(w, string(resp))
 }
 
+// SanitizedResponse sends a response after cleaning up formatting
 func SanitizedResponse(w http.ResponseWriter, response string) {
 	ret, err := SanitizeJSON([]byte(response))
 	if err != nil {
@@ -201,6 +204,7 @@ func SanitizedResponse(w http.ResponseWriter, response string) {
 	fmt.Fprint(w, string(ret))
 }
 
+// SanitizedResponseM sends a response using a proto message after cleaning up formatting
 func SanitizedResponseM(w http.ResponseWriter, response string, m proto.Message) {
 	out, err := SanitizeProtobuf(response, m)
 	if err != nil {
@@ -678,7 +682,7 @@ func (i *jsonAPIHandler) POSTPurchase(w http.ResponseWriter, r *http.Request) {
 		ErrorResponse(w, http.StatusBadRequest, err.Error())
 		return
 	}
-	orderId, paymentAddr, amount, online, err := i.node.Purchase(&data)
+	orderID, paymentAddr, amount, online, err := i.node.Purchase(&data)
 	if err != nil {
 		ErrorResponse(w, http.StatusInternalServerError, err.Error())
 		return
@@ -687,9 +691,9 @@ func (i *jsonAPIHandler) POSTPurchase(w http.ResponseWriter, r *http.Request) {
 		PaymentAddress string `json:"paymentAddress"`
 		Amount         uint64 `json:"amount"`
 		VendorOnline   bool   `json:"vendorOnline"`
-		OrderId        string `json:"orderId"`
+		OrderID        string `json:"orderId"`
 	}
-	ret := purchaseReturn{paymentAddr, amount, online, orderId}
+	ret := purchaseReturn{paymentAddr, amount, online, orderID}
 	b, err := json.MarshalIndent(ret, "", "    ")
 	if err != nil {
 		ErrorResponse(w, http.StatusInternalServerError, err.Error())
@@ -700,8 +704,8 @@ func (i *jsonAPIHandler) POSTPurchase(w http.ResponseWriter, r *http.Request) {
 }
 
 func (i *jsonAPIHandler) GETStatus(w http.ResponseWriter, r *http.Request) {
-	_, peerId := path.Split(r.URL.Path)
-	status, err := i.node.GetPeerStatus(peerId)
+	_, peerID := path.Split(r.URL.Path)
+	status, err := i.node.GetPeerStatus(peerID)
 	if err != nil {
 		ErrorResponse(w, http.StatusBadRequest, err.Error())
 		return
@@ -716,21 +720,21 @@ func (i *jsonAPIHandler) GETPeers(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	peerJson, err := json.MarshalIndent(peers, "", "    ")
+	peerJSON, err := json.MarshalIndent(peers, "", "    ")
 	if err != nil {
 		ErrorResponse(w, http.StatusInternalServerError, err.Error())
 		return
 	}
-	SanitizedResponse(w, string(peerJson))
+	SanitizedResponse(w, string(peerJSON))
 }
 
 func (i *jsonAPIHandler) POSTFollow(w http.ResponseWriter, r *http.Request) {
-	type PeerId struct {
+	type PeerID struct {
 		ID string `json:"id"`
 	}
 
 	decoder := json.NewDecoder(r.Body)
-	var pid PeerId
+	var pid PeerID
 	err := decoder.Decode(&pid)
 	if err != nil {
 		ErrorResponse(w, http.StatusBadRequest, err.Error())
@@ -745,11 +749,11 @@ func (i *jsonAPIHandler) POSTFollow(w http.ResponseWriter, r *http.Request) {
 }
 
 func (i *jsonAPIHandler) POSTUnfollow(w http.ResponseWriter, r *http.Request) {
-	type PeerId struct {
+	type PeerID struct {
 		ID string `json:"id"`
 	}
 	decoder := json.NewDecoder(r.Body)
-	var pid PeerId
+	var pid PeerID
 	err := decoder.Decode(&pid)
 	if err != nil {
 		ErrorResponse(w, http.StatusBadRequest, err.Error())
@@ -827,13 +831,13 @@ func (i *jsonAPIHandler) POSTSpendCoins(w http.ResponseWriter, r *http.Request) 
 		}
 	}
 
-	var orderId string
+	var orderID string
 	var thumbnail string
 	var memo string
 	var title string
 	contract, _, _, _, err := i.node.Datastore.Purchases().GetByPaymentAddress(addr)
 	if contract != nil && err == nil {
-		orderId, _ = i.node.CalcOrderId(contract.BuyerOrder)
+		orderId, _ = i.node.CalcOrderID(contract.BuyerOrder)
 		if contract.VendorListings[0].Item != nil && len(contract.VendorListings[0].Item.Images) > 0 {
 			thumbnail = contract.VendorListings[0].Item.Images[0].Tiny
 			title = contract.VendorListings[0].Item.Title

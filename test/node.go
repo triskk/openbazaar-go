@@ -2,15 +2,16 @@ package test
 
 import (
 	// "github.com/ipfs/go-ipfs/thirdparty/testutil"
-	"github.com/OpenBazaar/openbazaar-go/core"
-	"github.com/OpenBazaar/openbazaar-go/ipfs"
-	"github.com/OpenBazaar/openbazaar-go/net"
-	"github.com/OpenBazaar/openbazaar-go/net/service"
-	"github.com/OpenBazaar/spvwallet"
-	"github.com/btcsuite/btcd/chaincfg"
-	"github.com/tyler-smith/go-bip39"
 	"gx/ipfs/QmXYjuNuxVzXKJCfWasQk1RqkhVLDM9jtUKhqc2WPQmFSB/go-libp2p-peer"
 	"gx/ipfs/QmaPbCnUMBohSGo3KnxEa2bHqyJVVeEEcwtqJAYxerieBo/go-libp2p-crypto"
+
+	"github.com/OpenBazaar/spvwallet"
+	"github.com/btcsuite/btcd/chaincfg"
+	"github.com/phoreproject/openbazaar-go/core"
+	"github.com/phoreproject/openbazaar-go/ipfs"
+	"github.com/phoreproject/openbazaar-go/net"
+	"github.com/phoreproject/openbazaar-go/net/service"
+	"github.com/tyler-smith/go-bip39"
 )
 
 // NewNode creates a new *core.OpenBazaarNode prepared for testing

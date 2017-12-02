@@ -2,8 +2,9 @@ package db
 
 import (
 	"database/sql"
-	"github.com/OpenBazaar/openbazaar-go/repo"
 	"sync"
+
+	"github.com/phoreproject/openbazaar-go/repo"
 )
 
 type TxMetadataDB struct {

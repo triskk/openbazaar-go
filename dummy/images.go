@@ -6,9 +6,9 @@ import (
 	"net/http"
 	"time"
 
-	"github.com/OpenBazaar/openbazaar-go/core"
-	"github.com/OpenBazaar/openbazaar-go/pb"
 	"github.com/icrowley/fake"
+	"github.com/phoreproject/openbazaar-go/core"
+	"github.com/phoreproject/openbazaar-go/pb"
 )
 
 const randomImageURL = "http://lorempixel.com/600/400/"

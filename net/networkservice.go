@@ -6,7 +6,8 @@ import (
 	peer "gx/ipfs/QmXYjuNuxVzXKJCfWasQk1RqkhVLDM9jtUKhqc2WPQmFSB/go-libp2p-peer"
 
 	"errors"
-	"github.com/OpenBazaar/openbazaar-go/pb"
+
+	"github.com/phoreproject/openbazaar-go/pb"
 )
 
 var (

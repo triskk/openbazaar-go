@@ -1,10 +1,11 @@
 package resync
 
 import (
-	"github.com/OpenBazaar/openbazaar-go/repo"
+	"time"
+
 	"github.com/OpenBazaar/wallet-interface"
 	"github.com/op/go-logging"
-	"time"
+	"github.com/phoreproject/openbazaar-go/repo"
 )
 
 var log = logging.MustGetLogger("ResyncManager")

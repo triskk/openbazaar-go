@@ -5,9 +5,9 @@ import (
 	"strconv"
 	"time"
 
-	"github.com/OpenBazaar/openbazaar-go/pb"
 	"github.com/golang/protobuf/ptypes/timestamp"
 	"github.com/icrowley/fake"
+	"github.com/phoreproject/openbazaar-go/pb"
 )
 
 var conditions = []string{"New", "Used", "Bad", "Most Excellent"}

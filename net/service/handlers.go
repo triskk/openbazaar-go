@@ -8,10 +8,10 @@ import (
 	libp2p "gx/ipfs/QmaPbCnUMBohSGo3KnxEa2bHqyJVVeEEcwtqJAYxerieBo/go-libp2p-crypto"
 	"time"
 
-	"github.com/OpenBazaar/openbazaar-go/api/notifications"
-	"github.com/OpenBazaar/openbazaar-go/core"
-	"github.com/OpenBazaar/openbazaar-go/net"
-	"github.com/OpenBazaar/openbazaar-go/pb"
+	"gx/ipfs/QmNp85zy9RLrQ5oQD4hPyS39ezrrXpcaa7R4Y9kxdWQLLQ/go-cid"
+	blocks "gx/ipfs/QmSn9Td7xgxm9EV7iEjTckpUWmWApggzPxu7eFGWkkpwin/go-block-format"
+	"strconv"
+
 	"github.com/OpenBazaar/wallet-interface"
 	"github.com/btcsuite/btcd/chaincfg/chainhash"
 	"github.com/btcsuite/btcd/wire"
@@ -20,11 +20,13 @@ import (
 	"github.com/golang/protobuf/proto"
 	"github.com/golang/protobuf/ptypes"
 	"github.com/golang/protobuf/ptypes/any"
-	"gx/ipfs/QmNp85zy9RLrQ5oQD4hPyS39ezrrXpcaa7R4Y9kxdWQLLQ/go-cid"
-	blocks "gx/ipfs/QmSn9Td7xgxm9EV7iEjTckpUWmWApggzPxu7eFGWkkpwin/go-block-format"
-	"strconv"
+	"github.com/phoreproject/openbazaar-go/api/notifications"
+	"github.com/phoreproject/openbazaar-go/core"
+	"github.com/phoreproject/openbazaar-go/net"
+	"github.com/phoreproject/openbazaar-go/pb"
 )
 
+// HandlerForMsgType returns a handler function for a given message type
 func (service *OpenBazaarService) HandlerForMsgType(t pb.Message_MessageType) func(peer.ID, *pb.Message, interface{}) (*pb.Message, error) {
 	switch t {
 	case pb.Message_PING:
@@ -115,7 +117,7 @@ func (service *OpenBazaarService) handleFollow(pid peer.ID, pmes *pb.Message, op
 	if err != nil {
 		return nil, err
 	}
-	n := notifications.FollowNotification{notifications.NewID(), "follow", id.Pretty()}
+	n := notifications.FollowNotification{ID: notifications.NewID(), Type: "follow", PeerID: id.Pretty()}
 	service.broadcast <- n
 	service.datastore.Notifications().Put(n.ID, n, n.Type, time.Now())
 	log.Debugf("Received FOLLOW message from %s", id.Pretty())
@@ -158,7 +160,7 @@ func (service *OpenBazaarService) handleUnFollow(pid peer.ID, pmes *pb.Message, 
 	if err != nil {
 		return nil, err
 	}
-	n := notifications.UnfollowNotification{notifications.NewID(), "unfollow", id.Pretty()}
+	n := notifications.UnfollowNotification{ID: notifications.NewID(), Type: "unfollow", PeerID: id.Pretty()}
 	service.broadcast <- n
 	log.Debugf("Received UNFOLLOW message from %s", id.Pretty())
 	return nil, nil
@@ -314,7 +316,7 @@ func (service *OpenBazaarService) handleOrder(peer peer.ID, pmes *pb.Message, op
 			return errorResponse(err.Error()), err
 		}
 		service.node.Wallet.AddWatchedScript(script)
-		orderId, err := service.node.CalcOrderId(contract.BuyerOrder)
+		orderId, err := service.node.CalcOrderID(contract.BuyerOrder)
 		if err != nil {
 			return errorResponse(err.Error()), err
 		}
@@ -389,7 +391,7 @@ func (service *OpenBazaarService) handleOrder(peer peer.ID, pmes *pb.Message, op
 			return errorResponse(err.Error()), err
 		}
 		service.node.Wallet.AddWatchedScript(script)
-		orderId, err := service.node.CalcOrderId(contract.BuyerOrder)
+		orderId, err := service.node.CalcOrderID(contract.BuyerOrder)
 		if err != nil {
 			log.Error(err)
 			return errorResponse(err.Error()), err

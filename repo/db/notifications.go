@@ -4,7 +4,7 @@ import (
 	"database/sql"
 	"encoding/json"
 	"fmt"
-	notif "github.com/OpenBazaar/openbazaar-go/api/notifications"
+	notif "github.com/phoreproject/openbazaar-go/api/notifications"
 	"strconv"
 	"strings"
 	"sync"

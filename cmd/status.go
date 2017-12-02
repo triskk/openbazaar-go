@@ -2,9 +2,9 @@ package cmd
 
 import (
 	"fmt"
-	obnet "github.com/OpenBazaar/openbazaar-go/net"
-	"github.com/OpenBazaar/openbazaar-go/repo"
-	"github.com/OpenBazaar/openbazaar-go/repo/db"
+	obnet "github.com/phoreproject/openbazaar-go/net"
+	"github.com/phoreproject/openbazaar-go/repo"
+	"github.com/phoreproject/openbazaar-go/repo/db"
 	"github.com/ipfs/go-ipfs/repo/fsrepo"
 	"os"
 )

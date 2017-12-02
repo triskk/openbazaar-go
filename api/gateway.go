@@ -5,10 +5,10 @@ import (
 	"net/http"
 	"time"
 
-	"github.com/OpenBazaar/openbazaar-go/core"
-	"github.com/OpenBazaar/openbazaar-go/repo"
 	"github.com/ipfs/go-ipfs/core/corehttp"
 	"github.com/op/go-logging"
+	"github.com/phoreproject/openbazaar-go/core"
+	"github.com/phoreproject/openbazaar-go/repo"
 )
 
 var log = logging.MustGetLogger("api")
@@ -27,7 +27,7 @@ func NewGateway(n *core.OpenBazaarNode, authCookie http.Cookie, l net.Listener, 
 	log.SetBackend(logging.AddModuleLevel(logger))
 	topMux := http.NewServeMux()
 
-	jsonAPI, err := newJsonAPIHandler(n, authCookie, config)
+	jsonAPI, err := newJSONAPIHandler(n, authCookie, config)
 	if err != nil {
 		return nil, err
 	}

@@ -5,9 +5,6 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
-	"github.com/OpenBazaar/jsonpb"
-	"github.com/OpenBazaar/openbazaar-go/pb"
-	"github.com/golang/protobuf/ptypes"
 	"io"
 	"net/url"
 	"os"
@@ -16,6 +13,10 @@ import (
 	"strings"
 	"sync"
 	"time"
+
+	"github.com/OpenBazaar/jsonpb"
+	"github.com/golang/protobuf/ptypes"
+	"github.com/phoreproject/openbazaar-go/pb"
 )
 
 const bufferSize = 5

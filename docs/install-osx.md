@@ -35,14 +35,14 @@ Go should now be ready.
 ### Install openbazaar-go
 
 ```
-go get github.com/OpenBazaar/openbazaar-go
+go get github.com/phoreproject/openbazaar-go
 ```
 
-It will put the source code in $GOPATH/src/github.com/OpenBazaar/openbazaar-go
+It will put the source code in $GOPATH/src/github.com/phoreproject/openbazaar-go
 
 To compile and run the source:
 ```
-cd $GOPATH/src/github.com/OpenBazaar/openbazaar-go
+cd $GOPATH/src/github.com/phoreproject/openbazaar-go
 go run openbazaard.go start
 ```
 NOTE: If you have Xcode installed you may get the response `signal: killed`. If you do try running the following instead.

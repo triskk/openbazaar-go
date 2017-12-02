@@ -15,8 +15,6 @@ import (
 	"strconv"
 
 	"github.com/OpenBazaar/jsonpb"
-	"github.com/OpenBazaar/openbazaar-go/ipfs"
-	"github.com/OpenBazaar/openbazaar-go/pb"
 	"github.com/OpenBazaar/wallet-interface"
 	"github.com/btcsuite/btcd/chaincfg"
 	"github.com/btcsuite/btcd/chaincfg/chainhash"
@@ -25,6 +23,8 @@ import (
 	"github.com/golang/protobuf/proto"
 	"github.com/golang/protobuf/ptypes"
 	ipfspath "github.com/ipfs/go-ipfs/path"
+	"github.com/phoreproject/openbazaar-go/ipfs"
+	"github.com/phoreproject/openbazaar-go/pb"
 )
 
 type option struct {
@@ -213,7 +213,7 @@ func (n *OpenBazaarNode) Purchase(data *PurchaseData) (orderId string, paymentAd
 			if err != nil {
 				return "", "", 0, false, err
 			}
-			orderId, err := n.CalcOrderId(contract.BuyerOrder)
+			orderId, err := n.CalcOrderID(contract.BuyerOrder)
 			if err != nil {
 				return "", "", 0, false, err
 			}
@@ -244,7 +244,7 @@ func (n *OpenBazaarNode) Purchase(data *PurchaseData) (orderId string, paymentAd
 			if contract.VendorOrderConfirmation.PaymentAddress != contract.BuyerOrder.Payment.Address {
 				return "", "", 0, false, errors.New("Vendor responded with incorrect multisig address")
 			}
-			orderId, err := n.CalcOrderId(contract.BuyerOrder)
+			orderId, err := n.CalcOrderID(contract.BuyerOrder)
 			if err != nil {
 				return "", "", 0, false, err
 			}
@@ -355,7 +355,7 @@ func (n *OpenBazaarNode) Purchase(data *PurchaseData) (orderId string, paymentAd
 			if err != nil {
 				return "", "", 0, false, err
 			}
-			orderId, err := n.CalcOrderId(contract.BuyerOrder)
+			orderId, err := n.CalcOrderID(contract.BuyerOrder)
 			if err != nil {
 				return "", "", 0, false, err
 			}
@@ -401,7 +401,7 @@ func (n *OpenBazaarNode) Purchase(data *PurchaseData) (orderId string, paymentAd
 			if err != nil {
 				return "", "", 0, false, err
 			}
-			orderId, err := n.CalcOrderId(contract.BuyerOrder)
+			orderId, err := n.CalcOrderID(contract.BuyerOrder)
 			if err != nil {
 				return "", "", 0, false, err
 			}
@@ -605,7 +605,7 @@ func (n *OpenBazaarNode) EstimateOrderTotal(data *PurchaseData) (uint64, error) 
 }
 
 func (n *OpenBazaarNode) CancelOfflineOrder(contract *pb.RicardianContract, records []*wallet.TransactionRecord) error {
-	orderId, err := n.CalcOrderId(contract.BuyerOrder)
+	orderId, err := n.CalcOrderID(contract.BuyerOrder)
 	if err != nil {
 		return err
 	}
@@ -677,7 +677,7 @@ func (n *OpenBazaarNode) CancelOfflineOrder(contract *pb.RicardianContract, reco
 	return nil
 }
 
-func (n *OpenBazaarNode) CalcOrderId(order *pb.Order) (string, error) {
+func (n *OpenBazaarNode) CalcOrderID(order *pb.Order) (string, error) {
 	ser, err := proto.Marshal(order)
 	if err != nil {
 		return "", err

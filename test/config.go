@@ -5,8 +5,9 @@ import (
 	"os"
 	"path"
 
-	"github.com/OpenBazaar/openbazaar-go/repo"
 	"io/ioutil"
+
+	"github.com/phoreproject/openbazaar-go/repo"
 )
 
 // NewAPIConfig returns a new config object for the API tests

@@ -40,19 +40,19 @@ Go should now be installed.
 
 ### Install openbazaar-go
 ```
-go get github.com/OpenBazaar/openbazaar-go
+go get github.com/phoreproject/openbazaar-go
 ```
 
 It will put the source code in 
 ```
-$GOPATH/src/github.com/OpenBazaar/openbazaar-go
+$GOPATH/src/github.com/phoreproject/openbazaar-go
 ```
 
-During the few minutes it takes the process to complete without a progress indicator, then return to blank command line, [read about securing your node](https://github.com/OpenBazaar/openbazaar-go/blob/master/docs/security.md)
+During the few minutes it takes the process to complete without a progress indicator, then return to blank command line, [read about securing your node](https://github.com/phoreproject/openbazaar-go/blob/master/docs/security.md)
 
 To compile and run the source using the path above, WITHOUT encrypting the database:
 ```
-go run $GOPATH/src/github.com/OpenBazaar/openbazaar-go/openbazaard.go start
+go run $GOPATH/src/github.com/phoreproject/openbazaar-go/openbazaard.go start
 ```
 
 You will then see 

@@ -4,7 +4,7 @@ OpenBazaar Server Daemon in Go
 
 [![Build Status](https://travis-ci.org/OpenBazaar/openbazaar-go.svg?branch=master)](https://travis-ci.org/OpenBazaar/openbazaar-go)
 [![Coverage Status](https://coveralls.io/repos/github/OpenBazaar/openbazaar-go/badge.svg?branch=master)](https://coveralls.io/github/OpenBazaar/openbazaar-go?branch=master)
-[![Go Report Card](https://goreportcard.com/badge/github.com/OpenBazaar/openbazaar-go)](https://goreportcard.com/report/github.com/OpenBazaar/openbazaar-go)
+[![Go Report Card](https://goreportcard.com/badge/github.com/phoreproject/openbazaar-go)](https://goreportcard.com/report/github.com/phoreproject/openbazaar-go)
 
 This repository contains the OpenBazaar server daemon which handles the heavy lifting for the [OpenBazaar](https://openbazaar.org/) desktop application. The server combines several technologies: A modified [IPFS](https://ipfs.io) node, which itself combines ideas from Git, BitTorrent, and Kademlia. A lightweight SPV Bitcoin wallet for interacting with the Bitcoin network. And a JSON API which can be used by a user interface to control the node and browse the network. If you are looking for the OpenBazaar user interface code see [here](https://github.com/OpenBazaar/openbazaar-desktop).
 
@@ -29,11 +29,11 @@ A typical install of OpenBazaar contains a bundle of the server daemon and user 
 
 ### Install Pre-built Packages
 
-The easiest way to run the server is to download a pre-built binary. You can find binaries of our latest release for each operating system [here](https://github.com/OpenBazaar/openbazaar-go/releases/).
+The easiest way to run the server is to download a pre-built binary. You can find binaries of our latest release for each operating system [here](https://github.com/phoreproject/openbazaar-go/releases/).
 
 ### Build from Source
 
-To build from source you will need to have Go installed and properly configured. Detailed instructions for installing Go and openbazaar-go on each operating system can be found in the [docs package](https://github.com/OpenBazaar/openbazaar-go/tree/master/docs).
+To build from source you will need to have Go installed and properly configured. Detailed instructions for installing Go and openbazaar-go on each operating system can be found in the [docs package](https://github.com/phoreproject/openbazaar-go/tree/master/docs).
 
 ## Dependency Management
 
@@ -45,7 +45,7 @@ We are using a [fork](https://github.com/OpenBazaar/go-ipfs) of go-ipfs in the d
 
 ## Updating
 
-You can either pull in remote changes as normal or run `go get -u github.com/OpenBazaar/openbazaar-go`
+You can either pull in remote changes as normal or run `go get -u github.com/phoreproject/openbazaar-go`
 
 ## Usage
 
@@ -99,7 +99,7 @@ When ready we will put up a full documentation of the OpenBazaar protocol and th
 
 ## Contributing
 
-Contributions are definitely welcome! Please read the contributing [guidelines](https://github.com/OpenBazaar/openbazaar-go/blob/master/CONTRIBUTE.md) before starting.
+Contributions are definitely welcome! Please read the contributing [guidelines](https://github.com/phoreproject/openbazaar-go/blob/master/CONTRIBUTE.md) before starting.
 
 ## License
 

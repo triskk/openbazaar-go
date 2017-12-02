@@ -5,28 +5,36 @@ import (
 	"os"
 	"path/filepath"
 
-	"github.com/OpenBazaar/openbazaar-go/api"
-	obns "github.com/OpenBazaar/openbazaar-go/namesys"
-	"github.com/OpenBazaar/openbazaar-go/repo"
-	"github.com/ipfs/go-ipfs/core/corehttp"
 	manet "gx/ipfs/QmX3U3YXCQ6UYBxq2LVWF8dARS1hPUTEYLrSx654Qyxyw6/go-multiaddr-net"
 	ma "gx/ipfs/QmXY77cVe7rVRQXZZQRioukUM7aRW3BTcAgJe12MCtb3Ji/go-multiaddr"
 
-	lis "github.com/OpenBazaar/openbazaar-go/bitcoin/listeners"
-	rep "github.com/OpenBazaar/openbazaar-go/net/repointer"
-	ret "github.com/OpenBazaar/openbazaar-go/net/retriever"
-	"github.com/OpenBazaar/openbazaar-go/net/service"
+	"github.com/ipfs/go-ipfs/core/corehttp"
+	"github.com/phoreproject/openbazaar-go/api"
+	obns "github.com/phoreproject/openbazaar-go/namesys"
+	"github.com/phoreproject/openbazaar-go/repo"
+
+	lis "github.com/phoreproject/openbazaar-go/bitcoin/listeners"
+	rep "github.com/phoreproject/openbazaar-go/net/repointer"
+	ret "github.com/phoreproject/openbazaar-go/net/retriever"
+	"github.com/phoreproject/openbazaar-go/net/service"
 
 	"errors"
 	"fmt"
+	routing "gx/ipfs/QmPR2JzfKd9poHx9XBhzoFeBBC31ZM3W5iUPKJZWyaoZZm/go-libp2p-routing"
+	dht "gx/ipfs/QmUCS9EnqNq1kCnJds2eLDypBiS21aSiCf1MVzSUVB9TGA/go-libp2p-kad-dht"
+	dhtutil "gx/ipfs/QmUCS9EnqNq1kCnJds2eLDypBiS21aSiCf1MVzSUVB9TGA/go-libp2p-kad-dht/util"
+	peer "gx/ipfs/QmXYjuNuxVzXKJCfWasQk1RqkhVLDM9jtUKhqc2WPQmFSB/go-libp2p-peer"
+	proto "gx/ipfs/QmZ4Qi3GaRbjcx28Sme5eMH7RQjGkt8wHxt2a65oLaeFEV/gogo-protobuf/proto"
+	p2phost "gx/ipfs/QmaSxYRuMq4pkpBBG2CYaRrPx2z7NmMVEs34b9g61biQA6/go-libp2p-host"
+	recpb "gx/ipfs/QmbxkgUceEcuSZ4ZdBA3x74VUDSSYjHYmmeEqkjxbtZ6Jg/go-libp2p-record/pb"
+	"io/ioutil"
+	"net"
+	"net/http"
+	"net/url"
+	"path"
+	"time"
+
 	bstk "github.com/OpenBazaar/go-blockstackclient"
-	"github.com/OpenBazaar/openbazaar-go/bitcoin"
-	"github.com/OpenBazaar/openbazaar-go/bitcoin/exchange"
-	"github.com/OpenBazaar/openbazaar-go/core"
-	"github.com/OpenBazaar/openbazaar-go/ipfs"
-	obnet "github.com/OpenBazaar/openbazaar-go/net"
-	"github.com/OpenBazaar/openbazaar-go/repo/db"
-	"github.com/OpenBazaar/openbazaar-go/storage/selfhosted"
 	"github.com/OpenBazaar/spvwallet"
 	"github.com/OpenBazaar/wallet-interface"
 	"github.com/btcsuite/btcd/chaincfg"
@@ -42,19 +50,13 @@ import (
 	lockfile "github.com/ipfs/go-ipfs/repo/fsrepo/lock"
 	"github.com/ipfs/go-ipfs/thirdparty/ds-help"
 	"github.com/op/go-logging"
-	routing "gx/ipfs/QmPR2JzfKd9poHx9XBhzoFeBBC31ZM3W5iUPKJZWyaoZZm/go-libp2p-routing"
-	dht "gx/ipfs/QmUCS9EnqNq1kCnJds2eLDypBiS21aSiCf1MVzSUVB9TGA/go-libp2p-kad-dht"
-	dhtutil "gx/ipfs/QmUCS9EnqNq1kCnJds2eLDypBiS21aSiCf1MVzSUVB9TGA/go-libp2p-kad-dht/util"
-	peer "gx/ipfs/QmXYjuNuxVzXKJCfWasQk1RqkhVLDM9jtUKhqc2WPQmFSB/go-libp2p-peer"
-	proto "gx/ipfs/QmZ4Qi3GaRbjcx28Sme5eMH7RQjGkt8wHxt2a65oLaeFEV/gogo-protobuf/proto"
-	p2phost "gx/ipfs/QmaSxYRuMq4pkpBBG2CYaRrPx2z7NmMVEs34b9g61biQA6/go-libp2p-host"
-	recpb "gx/ipfs/QmbxkgUceEcuSZ4ZdBA3x74VUDSSYjHYmmeEqkjxbtZ6Jg/go-libp2p-record/pb"
-	"io/ioutil"
-	"net"
-	"net/http"
-	"net/url"
-	"path"
-	"time"
+	"github.com/phoreproject/openbazaar-go/bitcoin"
+	"github.com/phoreproject/openbazaar-go/bitcoin/exchange"
+	"github.com/phoreproject/openbazaar-go/core"
+	"github.com/phoreproject/openbazaar-go/ipfs"
+	obnet "github.com/phoreproject/openbazaar-go/net"
+	"github.com/phoreproject/openbazaar-go/repo/db"
+	"github.com/phoreproject/openbazaar-go/storage/selfhosted"
 )
 
 type Node struct {
@@ -96,7 +98,7 @@ func NewNode(config NodeConfig) (*Node, error) {
 
 	dataSharing, err := repo.GetDataSharing(configFile)
 	if err != nil {
-		return err
+		return nil, err
 	}
 
 	walletCfg, err := repo.GetWalletConfig(configFile)
@@ -242,7 +244,7 @@ func NewNode(config NodeConfig) (*Node, error) {
 	for _, pnd := range dataSharing.PushTo {
 		p, err := peer.IDB58Decode(pnd)
 		if err != nil {
-			return err
+			return nil, err
 		}
 		pushNodes = append(pushNodes, p)
 	}

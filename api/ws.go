@@ -4,12 +4,13 @@ import (
 	"crypto/sha256"
 	"encoding/hex"
 	"fmt"
-	"github.com/OpenBazaar/openbazaar-go/core"
-	"github.com/OpenBazaar/openbazaar-go/repo"
-	"github.com/gorilla/websocket"
-	"github.com/ipfs/go-ipfs/commands"
 	"net/http"
 	"strings"
+
+	"github.com/gorilla/websocket"
+	"github.com/ipfs/go-ipfs/commands"
+	"github.com/phoreproject/openbazaar-go/core"
+	"github.com/phoreproject/openbazaar-go/repo"
 )
 
 type connection struct {

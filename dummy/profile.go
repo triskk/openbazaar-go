@@ -3,8 +3,8 @@ package main
 import (
 	"math/rand"
 
-	"github.com/OpenBazaar/openbazaar-go/pb"
 	"github.com/icrowley/fake"
+	"github.com/phoreproject/openbazaar-go/pb"
 )
 
 func newRandomProfile(randomImages chan (*pb.Profile_Image)) *pb.Profile {

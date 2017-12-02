@@ -9,25 +9,19 @@ import (
 	"path"
 	"strconv"
 
-	"github.com/OpenBazaar/openbazaar-go/ipfs"
-	obnet "github.com/OpenBazaar/openbazaar-go/net"
+	"io/ioutil"
+	"strings"
+
 	"github.com/ipfs/go-ipfs/commands"
 	ipfscore "github.com/ipfs/go-ipfs/core"
 	bitswap "github.com/ipfs/go-ipfs/exchange/bitswap/network"
 	"github.com/ipfs/go-ipfs/namesys"
 	"github.com/ipfs/go-ipfs/repo/config"
-	"io/ioutil"
-	"strings"
+	"github.com/phoreproject/openbazaar-go/ipfs"
+	obnet "github.com/phoreproject/openbazaar-go/net"
 
 	"bufio"
 	"errors"
-	"github.com/OpenBazaar/openbazaar-go/repo"
-	"github.com/OpenBazaar/openbazaar-go/repo/db"
-	"github.com/ipfs/go-ipfs/core/coreunix"
-	ipfspath "github.com/ipfs/go-ipfs/path"
-	"github.com/ipfs/go-ipfs/repo/fsrepo"
-	"golang.org/x/crypto/ssh/terminal"
-	"golang.org/x/net/proxy"
 	"gx/ipfs/QmNp85zy9RLrQ5oQD4hPyS39ezrrXpcaa7R4Y9kxdWQLLQ/go-cid"
 	ipld "gx/ipfs/QmPN7cwmpcc4DWXb4KTB9dNAJgjuPY69h3npsMfhRrQL9c/go-ipld-format"
 	pstore "gx/ipfs/QmPgDWmTmuzvP7QE5zwo1TmjbJme9pmZHNujB2453jkCTr/go-libp2p-peerstore"
@@ -45,6 +39,14 @@ import (
 	"sync"
 	"syscall"
 	"time"
+
+	"github.com/ipfs/go-ipfs/core/coreunix"
+	ipfspath "github.com/ipfs/go-ipfs/path"
+	"github.com/ipfs/go-ipfs/repo/fsrepo"
+	"github.com/phoreproject/openbazaar-go/repo"
+	"github.com/phoreproject/openbazaar-go/repo/db"
+	"golang.org/x/crypto/ssh/terminal"
+	"golang.org/x/net/proxy"
 )
 
 type Restore struct {

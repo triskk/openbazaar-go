@@ -7,16 +7,17 @@ import (
 	"os"
 	"path"
 
-	"github.com/OpenBazaar/openbazaar-go/ipfs"
+	"path/filepath"
+	"runtime"
+	"time"
+
 	"github.com/ipfs/go-ipfs/core"
 	"github.com/ipfs/go-ipfs/namesys"
 	"github.com/ipfs/go-ipfs/repo/fsrepo"
 	"github.com/mitchellh/go-homedir"
 	"github.com/op/go-logging"
+	"github.com/phoreproject/openbazaar-go/ipfs"
 	"github.com/tyler-smith/go-bip39"
-	"path/filepath"
-	"runtime"
-	"time"
 )
 
 const RepoVersion = "5"
