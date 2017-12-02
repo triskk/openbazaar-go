@@ -411,9 +411,6 @@ func newHTTPGateway(node *core.OpenBazaarNode, authCookie http.Cookie, config re
 		return nil, fmt.Errorf("newHTTPGateway: manet.Listen(%s) failed: %s", gatewayMaddr, err)
 	}
 
-	// We might have listened to /tcp/0 - let's see what we are listing on
-	gatewayMaddr = gwLis.Multiaddr()
-
 	// Setup an options slice
 	var opts = []corehttp.ServeOption{
 		corehttp.MetricsCollectionOption("gateway"),

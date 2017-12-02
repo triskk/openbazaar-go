@@ -183,6 +183,9 @@ func (c *ChatDB) MarkAsRead(peerID string, subject string, outgoing bool, messag
 		}
 		stmt, _ = tx.Prepare("update chat set read=1 where peerID=? and subject=? and outgoing=? and timestamp<=(select timestamp from chat where messageID=?)")
 		_, err = stmt.Exec(peerID, subject, outgoingInt, messageId)
+		if err {
+			return "", updated, err
+		}
 	} else {
 		var peerStm string
 		if peerID != "" {
@@ -213,6 +216,9 @@ func (c *ChatDB) MarkAsRead(peerID string, subject string, outgoing bool, messag
 			_, err = stmt.Exec(subject, peerID, outgoingInt)
 		} else {
 			_, err = stmt.Exec(subject, outgoingInt)
+		}
+		if err != nil {
+			return "", updated, err
 		}
 	}
 	defer stmt.Close()

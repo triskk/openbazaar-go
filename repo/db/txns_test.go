@@ -147,6 +147,9 @@ func TestTxnsDB_UpdateHeight(t *testing.T) {
 		t.Error(err)
 	}
 	_, txn, err := txdb.Get(tx.TxHash())
+	if err != nil {
+		t.Error(err)
+	}
 	if txn.Height != -1 {
 		t.Error("Txn db failed to update height")
 	}

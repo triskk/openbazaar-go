@@ -1210,6 +1210,9 @@ func (n *OpenBazaarNode) ValidateDirectPaymentAddress(order *pb.Order) error {
 		return err
 	}
 	addr, redeemScript, err := n.Wallet.GenerateMultisigScript([]hd.ExtendedKey{*buyerKey, *vendorKey}, 1, time.Duration(0), nil)
+	if err != nil {
+		return errors.New("Cannot generate multisig script.")
+	}
 	if order.Payment.Address != addr.EncodeAddress() {
 		return errors.New("Invalid payment address")
 	}
@@ -1291,6 +1294,9 @@ func (n *OpenBazaarNode) ValidateModeratedPaymentAddress(order *pb.Order, timeou
 		return errors.New("Invalid moderator key")
 	}
 	addr, redeemScript, err := n.Wallet.GenerateMultisigScript([]hd.ExtendedKey{*buyerKey, *vendorKey, *ModeratorKey}, 2, timeout, vendorKey)
+	if err != nil {
+		return errors.New("Error generating multisig script")
+	}
 	if order.Payment.Address != addr.EncodeAddress() {
 		return errors.New("Invalid payment address")
 	}

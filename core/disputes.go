@@ -923,6 +923,11 @@ func (n *OpenBazaarNode) ValidateCaseContract(contract *pb.RicardianContract) []
 		timeout, _ := time.ParseDuration(strconv.Itoa(int(contract.VendorListings[0].Metadata.EscrowTimeoutHours)) + "h")
 		addr, redeemScript, err := n.Wallet.GenerateMultisigScript([]hd.ExtendedKey{*buyerKey, *vendorKey, *moderatorKey}, 2, timeout, vendorKey)
 
+		if err != nil {
+			validationErrors = append(validationErrors, "Error generating a multisig wallet")
+			return validationErrors
+		}
+
 		if contract.BuyerOrder.Payment.Address != addr.EncodeAddress() {
 			validationErrors = append(validationErrors, "The calculated bitcoin address doesn't match the address in the order")
 		}

@@ -8,8 +8,8 @@ import (
 	"testing"
 	"time"
 
-	"github.com/phoreproject/openbazaar-go/pb"
 	"github.com/golang/protobuf/ptypes"
+	"github.com/phoreproject/openbazaar-go/pb"
 )
 
 var casesdb CasesDB
@@ -117,6 +117,9 @@ func TestUpdateWithNil(t *testing.T) {
 		t.Error(err)
 	}
 	buyerContract, _, _, _, _, _, _, _, _, _, err := casesdb.GetCaseMetadata("caseID")
+	if err != nil {
+		t.Error(err)
+	}
 	if buyerContract != nil {
 		t.Error("Vendor contract was not nil")
 	}
