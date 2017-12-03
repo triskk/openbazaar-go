@@ -18,11 +18,9 @@ import (
 	"crypto/rand"
 	"io/ioutil"
 	"net/http"
-	"net/url"
 	"strings"
 
 	bstk "github.com/OpenBazaar/go-blockstackclient"
-	"github.com/OpenBazaar/spvwallet"
 	"github.com/OpenBazaar/wallet-interface"
 	"github.com/btcsuite/btcd/chaincfg"
 	"github.com/btcsuite/btcutil/base58"
@@ -220,9 +218,6 @@ func (x *Start) Execute(args []string) error {
 		}
 	}
 
-	// Get creation date. Ignore the error and use a default timestamp.
-	creationDate, _ := sqliteDB.Config().GetCreationDate()
-
 	// Create user-agent file
 	userAgentBytes := []byte(core.USERAGENT + x.UserAgent)
 	ioutil.WriteFile(path.Join(repoPath, "root", "user_agent"), userAgentBytes, os.ModePerm)
@@ -315,17 +310,17 @@ func (x *Start) Execute(args []string) error {
 		log.Error(err)
 		return err
 	}
-	onionAddrString := "/onion/" + onionAddr + ":4003"
+	onionAddrString := "/onion/" + onionAddr + ":5003"
 	if x.Tor {
 		cfg.Addresses.Swarm = []string{}
 		cfg.Addresses.Swarm = append(cfg.Addresses.Swarm, onionAddrString)
 	} else if x.DualStack {
 		cfg.Addresses.Swarm = []string{}
 		cfg.Addresses.Swarm = append(cfg.Addresses.Swarm, onionAddrString)
-		cfg.Addresses.Swarm = append(cfg.Addresses.Swarm, "/ip4/0.0.0.0/tcp/4001")
-		cfg.Addresses.Swarm = append(cfg.Addresses.Swarm, "/ip6/::/tcp/4001")
-		cfg.Addresses.Swarm = append(cfg.Addresses.Swarm, "/ip6/::/tcp/9005/ws")
-		cfg.Addresses.Swarm = append(cfg.Addresses.Swarm, "/ip4/0.0.0.0/tcp/9005/ws")
+		cfg.Addresses.Swarm = append(cfg.Addresses.Swarm, "/ip4/0.0.0.0/tcp/5001")
+		cfg.Addresses.Swarm = append(cfg.Addresses.Swarm, "/ip6/::/tcp/5001")
+		cfg.Addresses.Swarm = append(cfg.Addresses.Swarm, "/ip6/::/tcp/10005/ws")
+		cfg.Addresses.Swarm = append(cfg.Addresses.Swarm, "/ip4/0.0.0.0/tcp/5005/ws")
 	}
 	// Iterate over our address and process them as needed
 	var onionTransport *oniontp.OnionTransport
@@ -502,63 +497,12 @@ func (x *Start) Execute(args []string) error {
 		return errors.New("Trusted peer must be set if using regtest with the spvwallet")
 	}
 
-	var w3 io.Writer
-	if x.NoLogFiles {
-		w3 = &DummyWriter{}
-	} else {
-		w3 = &lumberjack.Logger{
-			Filename:   path.Join(repoPath, "logs", "bitcoin.log"),
-			MaxSize:    10, // Megabytes
-			MaxBackups: 3,
-			MaxAge:     30, // Days
-		}
-	}
-	bitcoinFile := logging.NewLogBackend(w3, "", 0)
-	bitcoinFileFormatter := logging.NewBackendFormatter(bitcoinFile, fileLogFormat)
-	ml := logging.MultiLogger(bitcoinFileFormatter)
-
 	var resyncManager *resync.ResyncManager
 	var cryptoWallet wallet.Wallet
 	switch strings.ToLower(walletCfg.Type) {
-	case "spvwallet":
-		var tp net.Addr
-		if walletCfg.TrustedPeer != "" {
-			tp, err = net.ResolveTCPAddr("tcp", walletCfg.TrustedPeer)
-			if err != nil {
-				log.Error(err)
-				return err
-			}
-		}
-		feeApi, err := url.Parse(walletCfg.FeeAPI)
-		if err != nil {
-			log.Error(err)
-			return err
-		}
-		spvwalletConfig := &spvwallet.Config{
-			Mnemonic:     mn,
-			Params:       &params,
-			MaxFee:       uint64(walletCfg.MaxFee),
-			LowFee:       uint64(walletCfg.LowFeeDefault),
-			MediumFee:    uint64(walletCfg.MediumFeeDefault),
-			HighFee:      uint64(walletCfg.HighFeeDefault),
-			FeeAPI:       *feeApi,
-			RepoPath:     repoPath,
-			CreationDate: creationDate,
-			DB:           sqliteDB,
-			UserAgent:    "OpenBazaar",
-			TrustedPeer:  tp,
-			Proxy:        torDialer,
-			Logger:       ml,
-		}
-		cryptoWallet, err = spvwallet.NewSPVWallet(spvwalletConfig)
-		if err != nil {
-			log.Error(err)
-			return err
-		}
-		resyncManager = resync.NewResyncManager(sqliteDB.Sales(), cryptoWallet)
-	case "bitcoind":
+	case "phored":
 		if walletCfg.Binary == "" {
-			return errors.New("The path to the bitcoind binary must be specified in the config file when using bitcoind")
+			return errors.New("The path to the bitcoind binary must be specified in the config file when using phored. Try typing \"which phored\"")
 		}
 		usetor := false
 		if usingTor && !usingClearnet {
@@ -566,7 +510,7 @@ func (x *Start) Execute(args []string) error {
 		}
 		cryptoWallet = bitcoind.NewBitcoindWallet(mn, &params, repoPath, walletCfg.TrustedPeer, walletCfg.Binary, walletCfg.RPCUser, walletCfg.RPCPassword, usetor, controlPort)
 	default:
-		log.Fatal("Unknown wallet type")
+		log.Fatal("Unknown wallet type. Valid wallet types: phored")
 	}
 
 	// Push nodes

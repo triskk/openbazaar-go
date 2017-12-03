@@ -1,16 +1,17 @@
 package bitcoind
 
 import (
-	"github.com/OpenBazaar/wallet-interface"
-	"github.com/btcsuite/btcd/chaincfg/chainhash"
-	"github.com/btcsuite/btcrpcclient"
 	"io/ioutil"
 	"net/http"
 	"time"
+
+	"github.com/OpenBazaar/wallet-interface"
+	"github.com/btcsuite/btcd/chaincfg/chainhash"
+	"github.com/phoreproject/rpcclient"
 )
 
 type NotificationListener struct {
-	client    *btcrpcclient.Client
+	client    *rpcclient.Client
 	listeners []func(wallet.TransactionCallback)
 }
 
@@ -30,11 +31,7 @@ func (l *NotificationListener) notify(w http.ResponseWriter, r *http.Request) {
 		log.Error(err)
 		return
 	}
-	watchOnly := false
-	txInfo, err := l.client.GetTransaction(hash, &watchOnly)
-	if err != nil {
-		watchOnly = true
-	}
+	txInfo, err := l.client.GetTransaction(hash)
 	var outputs []wallet.TransactionOutput
 	for i, txout := range tx.MsgTx().TxOut {
 		out := wallet.TransactionOutput{ScriptPubKey: txout.PkScript, Value: txout.Value, Index: uint32(i)}
@@ -71,7 +68,6 @@ func (l *NotificationListener) notify(w http.ResponseWriter, r *http.Request) {
 		Txid:      tx.Hash().CloneBytes(),
 		Inputs:    inputs,
 		Outputs:   outputs,
-		WatchOnly: watchOnly,
 		Value:     int64(txInfo.Amount * 100000000),
 		Timestamp: time.Unix(txInfo.TimeReceived, 0),
 		Height:    height,
@@ -81,7 +77,7 @@ func (l *NotificationListener) notify(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
-func startNotificationListener(client *btcrpcclient.Client, listeners []func(wallet.TransactionCallback)) {
+func startNotificationListener(client *rpcclient.Client, listeners []func(wallet.TransactionCallback)) {
 	l := NotificationListener{
 		client:    client,
 		listeners: listeners,

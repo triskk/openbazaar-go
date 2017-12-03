@@ -10,7 +10,7 @@ Example:
 
 ### Change the Ports in the Config File
 
-In the new data directory, open the config file change the default 4001 and 9005 ports in the Addresses object, and save the file. You can change them to any unused, valid port number. 
+In the new data directory, open the config file change the default 5001 and 10005 ports in the Addresses object, and save the file. You can change them to any unused, valid port number. 
 
 Example:
 ```

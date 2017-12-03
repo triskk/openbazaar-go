@@ -29,7 +29,7 @@ Edit the config file found in the openbazaar2.0 data directory to the following 
 ```
 "Addresses": {
     "Swarm": [
-      "/onion/erhkddypoy6qml6h:4003"
+      "/onion/erhkddypoy6qml6h:5003"
     ]
   },
 ```
@@ -37,9 +37,9 @@ Or the following for dual-stack mode:
 ```
 "Addresses": {
     "Swarm": [
-      "/onion/erhkddypoy6qml6h:4003",
-      "/ip4/0.0.0.0/tcp/4001",
-      "/ip6/::/tcp/4001"
+      "/onion/erhkddypoy6qml6h:5003",
+      "/ip4/0.0.0.0/tcp/5001",
+      "/ip6/::/tcp/5001"
     ]
   },
 ```

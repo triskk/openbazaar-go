@@ -40,7 +40,7 @@ JSON-API authentication boolean to true:
 }
 ```
 
-Note: when you run a node on a remote computer you must modify the gateway address in the config. For example: `"Addresses": {"Gateway": "/ip4/0.0.0.0/tcp/4002"}`. If the address is
+Note: when you run a node on a remote computer you must modify the gateway address in the config. For example: `"Addresses": {"Gateway": "/ip4/0.0.0.0/tcp/5002"}`. If the address is
 set to anything other than localhost, the daemon will enable authentication by default for security reasons.
 
 There are two ways for a client to authenticate:

@@ -7,6 +7,11 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
+	"os/exec"
+	"strconv"
+	"strings"
+	"time"
+
 	"github.com/OpenBazaar/spvwallet"
 	"github.com/OpenBazaar/wallet-interface"
 	"github.com/btcsuite/btcd/blockchain"
@@ -15,18 +20,14 @@ import (
 	"github.com/btcsuite/btcd/chaincfg/chainhash"
 	"github.com/btcsuite/btcd/txscript"
 	"github.com/btcsuite/btcd/wire"
-	"github.com/btcsuite/btcrpcclient"
-	btc "github.com/btcsuite/btcutil"
 	"github.com/btcsuite/btcutil/coinset"
 	hd "github.com/btcsuite/btcutil/hdkeychain"
 	"github.com/btcsuite/btcutil/txsort"
 	"github.com/btcsuite/btcwallet/wallet/txrules"
 	"github.com/op/go-logging"
+	"github.com/phoreproject/rpcclient"
+	btc "github.com/phoreproject/rpcclient/util"
 	b39 "github.com/tyler-smith/go-bip39"
-	"os/exec"
-	"strconv"
-	"strings"
-	"time"
 )
 
 var log = logging.MustGetLogger("bitcoind")
@@ -42,7 +43,7 @@ type BitcoindWallet struct {
 	masterPrivateKey *hd.ExtendedKey
 	masterPublicKey  *hd.ExtendedKey
 	listeners        []func(wallet.TransactionCallback)
-	rpcClient        *btcrpcclient.Client
+	rpcClient        *rpcclient.Client
 	binary           string
 	controlPort      int
 	useTor           bool
@@ -50,7 +51,7 @@ type BitcoindWallet struct {
 	scriptsToAdd     [][]byte
 }
 
-var connCfg *btcrpcclient.ConnConfig = &btcrpcclient.ConnConfig{
+var connCfg *rpcclient.ConnConfig = &rpcclient.ConnConfig{
 	Host:                 "localhost:8332",
 	HTTPPostMode:         true, // Bitcoin core only supports HTTP POST mode
 	DisableTLS:           true, // Bitcoin core does not provide TLS by default
@@ -113,7 +114,7 @@ func (w *BitcoindWallet) BuildArguments(rescan bool) []string {
 func (w *BitcoindWallet) Start() {
 	w.shutdownIfActive()
 	args := w.BuildArguments(false)
-	client, _ := btcrpcclient.New(connCfg, nil)
+	client, _ := rpcclient.New(connCfg, nil)
 	w.rpcClient = client
 	go startNotificationListener(client, w.listeners)
 
@@ -122,7 +123,7 @@ func (w *BitcoindWallet) Start() {
 	ticker := time.NewTicker(time.Second * 30)
 	go func() {
 		for range ticker.C {
-			log.Fatal("Failed to connect to bitcoind")
+			log.Fatal("Failed to connect to phored")
 		}
 	}()
 	for {
@@ -133,7 +134,7 @@ func (w *BitcoindWallet) Start() {
 		time.Sleep(time.Second)
 	}
 	ticker.Stop()
-	log.Info("Connected to bitcoind")
+	log.Info("Connected to phored")
 	w.started = true
 	go w.addScripts()
 }
@@ -146,7 +147,7 @@ func (w *BitcoindWallet) addScripts() {
 
 // If bitcoind is already running let's shut it down so we restart it with our options
 func (w *BitcoindWallet) shutdownIfActive() {
-	client, err := btcrpcclient.New(connCfg, nil)
+	client, err := rpcclient.New(connCfg, nil)
 	if err != nil {
 		return
 	}
@@ -926,7 +927,7 @@ func (w *BitcoindWallet) ReSyncBlockchain(fromDate time.Time) {
 	cmd := exec.Command(w.binary, args...)
 	cmd.Start()
 
-	client, err := btcrpcclient.New(connCfg, nil)
+	client, err := rpcclient.New(connCfg, nil)
 	if err != nil {
 		log.Error("Could not connect to bitcoind during rescan")
 	}

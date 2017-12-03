@@ -207,7 +207,7 @@ func TestInitConfig(t *testing.T) {
 	if err != nil {
 		t.Error("InitConfig threw an unexpected error")
 	}
-	if config.Addresses.Gateway != "/ip4/127.0.0.1/tcp/4002" {
+	if config.Addresses.Gateway != "/ip4/127.0.0.1/tcp/5002" {
 		t.Error("config.Addresses.Gateway is not set")
 	}
 }

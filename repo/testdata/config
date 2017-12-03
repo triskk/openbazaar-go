@@ -5,21 +5,19 @@
   "Addresses": {
     "API": "",
     "Announce": null,
-    "Gateway": "/ip4/127.0.0.1/tcp/4002",
+    "Gateway": "/ip4/127.0.0.1/tcp/5002",
     "NoAnnounce": null,
     "Swarm": [
-      "/ip4/0.0.0.0/tcp/4001",
-      "/ip4/0.0.0.0/udp/4001/utp",
-      "/ip6/::/tcp/4001",
-      "/ip6/::/udp/4001/utp"
+      "/ip4/0.0.0.0/tcp/5001",
+      "/ip4/0.0.0.0/udp/5001/utp",
+      "/ip6/::/tcp/5001",
+      "/ip6/::/udp/5001/utp"
     ]
   },
-  "Bootstrap": [
-  ],
+  "Bootstrap": [],
   "DataSharing": {
     "AcceptStoreRequests": false,
-    "PushTo": [
-    ]
+    "PushTo": []
   },
   "Datastore": {
     "BloomFilterSize": 0,

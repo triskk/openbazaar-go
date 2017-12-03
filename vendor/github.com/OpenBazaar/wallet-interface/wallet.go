@@ -131,7 +131,6 @@ type TransactionCallback struct {
 	Height    int32
 	Timestamp time.Time
 	Value     int64
-	WatchOnly bool
 }
 
 type TransactionOutput struct {
