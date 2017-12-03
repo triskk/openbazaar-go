@@ -837,7 +837,7 @@ func (i *jsonAPIHandler) POSTSpendCoins(w http.ResponseWriter, r *http.Request) 
 	var title string
 	contract, _, _, _, err := i.node.Datastore.Purchases().GetByPaymentAddress(addr)
 	if contract != nil && err == nil {
-		orderId, _ = i.node.CalcOrderID(contract.BuyerOrder)
+		orderID, _ = i.node.CalcOrderID(contract.BuyerOrder)
 		if contract.VendorListings[0].Item != nil && len(contract.VendorListings[0].Item.Images) > 0 {
 			thumbnail = contract.VendorListings[0].Item.Images[0].Tiny
 			title = contract.VendorListings[0].Item.Title
@@ -853,7 +853,7 @@ func (i *jsonAPIHandler) POSTSpendCoins(w http.ResponseWriter, r *http.Request) 
 		Txid:       txid.String(),
 		Address:    snd.Address,
 		Memo:       memo,
-		OrderId:    orderId,
+		OrderID:    orderID,
 		Thumbnail:  thumbnail,
 		CanBumpFee: false,
 	}); err != nil {
@@ -2727,7 +2727,7 @@ func (i *jsonAPIHandler) GETTransactions(w http.ResponseWriter, r *http.Request)
 		if ok {
 			tx.Address = m.Address
 			tx.Memo = m.Memo
-			tx.OrderId = m.OrderId
+			tx.OrderId = m.OrderID
 			tx.Thumbnail = m.Thumbnail
 			tx.CanBumpFee = m.CanBumpFee
 		}
@@ -3070,7 +3070,7 @@ func (i *jsonAPIHandler) POSTBumpFee(w http.ResponseWriter, r *http.Request) {
 		Txid:       newTxid.String(),
 		Address:    "",
 		Memo:       fmt.Sprintf("Fee bump of %s", txid),
-		OrderId:    "",
+		OrderID:    "",
 		Thumbnail:  "",
 		CanBumpFee: true,
 	}); err != nil {

@@ -26,7 +26,7 @@ func (t *TxMetadataDB) Put(m repo.Metadata) error {
 	if m.CanBumpFee {
 		bumpable = 1
 	}
-	_, err = stmt.Exec(m.Txid, m.Address, m.Memo, m.OrderId, m.Thumbnail, bumpable)
+	_, err = stmt.Exec(m.Txid, m.Address, m.Memo, m.OrderID, m.Thumbnail, bumpable)
 	if err != nil {
 		tx.Rollback()
 		return err
@@ -79,7 +79,7 @@ func (t *TxMetadataDB) GetAll() (map[string]repo.Metadata, error) {
 			Txid:       txid,
 			Address:    address,
 			Memo:       memo,
-			OrderId:    orderId,
+			OrderID:    orderId,
 			Thumbnail:  thumbnail,
 			CanBumpFee: bumpable,
 		}

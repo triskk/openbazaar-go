@@ -41,7 +41,7 @@ func (l *WalletListener) OnTransactionReceived(cb wallet.TransactionCallback) {
 			Memo:          metadata.Memo,
 			Timestamp:     cb.Timestamp,
 			Confirmations: int32(confirmations),
-			OrderId:       metadata.OrderId,
+			OrderID:       metadata.OrderID,
 			Thumbnail:     metadata.Thumbnail,
 			Height:        cb.Height,
 			CanBumpFee:    cb.Value > 0,
