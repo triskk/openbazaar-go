@@ -32,7 +32,6 @@ func (x *Status) Execute(args []string) error {
 		sqliteDB, err := db.Create(repoPath, "", x.Testnet)
 		if err != nil {
 			return err
-			os.Exit(1)
 		}
 		defer sqliteDB.Close()
 		if sqliteDB.Config().IsEncrypted() {

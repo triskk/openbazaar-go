@@ -399,7 +399,6 @@ func (n *OpenBazaarNode) SendDisputeClose(peerId string, k *libp2p.PubKey, resol
 		Payload:     a,
 	}
 	return n.sendMessage(peerId, k, m)
-	return nil
 }
 
 func (n *OpenBazaarNode) SendChat(peerId string, chatMessage *pb.Chat) error {

@@ -305,13 +305,13 @@ func TestCasesGetCaseMetaData(t *testing.T) {
 		t.Errorf("Expected state %s got %s", pb.OrderState_DISPUTED, state)
 	}
 	if read != false {
-		t.Errorf("Expected read=%s got %s", false, read)
+		t.Errorf("Expected read=%t got %t", false, read)
 	}
 	if date.After(time.Now()) || date.Equal(time.Time{}) {
 		t.Error("Case timestamp invalid")
 	}
 	if !buyerOpened {
-		t.Errorf("Expected buyerOpened=%s got %s", true, buyerOpened)
+		t.Errorf("Expected buyerOpened=%t got %t", true, buyerOpened)
 	}
 	if claim != "blah" {
 		t.Errorf("Expected claim=%s got %s", "blah", claim)

@@ -359,7 +359,8 @@ func RestoreDirectory(repoPath, directory string, nd *ipfscore.IpfsNode, id *cid
 		wg.Add(1)
 		go func(link *ipld.Link) {
 			defer wg.Done()
-			cctx, _ := context.WithTimeout(context.Background(), time.Second*30)
+			cctx, cancel := context.WithTimeout(context.Background(), time.Second*30)
+			defer cancel()
 			r, err := coreunix.Cat(cctx, nd, "/ipfs/"+link.Cid.String())
 			if err != nil {
 				PrintError(fmt.Sprintf("Error retrieving %s\n", path.Join(directory, l.Name)))
