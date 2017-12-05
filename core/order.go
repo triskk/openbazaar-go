@@ -15,7 +15,7 @@ import (
 	"strconv"
 
 	"github.com/OpenBazaar/jsonpb"
-	"github.com/OpenBazaar/wallet-interface"
+	"github.com/phoreproject/wallet-interface"
 	"github.com/phoreproject/btcd/chaincfg"
 	"github.com/phoreproject/btcd/chaincfg/chainhash"
 	"github.com/phoreproject/btcd/wire"

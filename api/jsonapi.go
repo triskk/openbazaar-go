@@ -30,21 +30,20 @@ import (
 	"io/ioutil"
 
 	"github.com/OpenBazaar/jsonpb"
-	"github.com/OpenBazaar/spvwallet"
-	"github.com/OpenBazaar/wallet-interface"
-	"github.com/phoreproject/btcd/chaincfg"
-	"github.com/phoreproject/btcd/chaincfg/chainhash"
-	"github.com/phoreproject/btcutil/base58"
 	"github.com/golang/protobuf/proto"
 	"github.com/golang/protobuf/ptypes"
 	"github.com/ipfs/go-ipfs/core/coreunix"
 	ipnspath "github.com/ipfs/go-ipfs/path"
 	lockfile "github.com/ipfs/go-ipfs/repo/fsrepo/lock"
+	"github.com/phoreproject/btcd/chaincfg"
+	"github.com/phoreproject/btcd/chaincfg/chainhash"
+	"github.com/phoreproject/btcutil/base58"
 	"github.com/phoreproject/openbazaar-go/api/notifications"
 	"github.com/phoreproject/openbazaar-go/core"
 	"github.com/phoreproject/openbazaar-go/ipfs"
 	"github.com/phoreproject/openbazaar-go/pb"
 	"github.com/phoreproject/openbazaar-go/repo"
+	"github.com/phoreproject/wallet-interface"
 )
 
 // JSONAPIConfig stores information about the configuration of the API
@@ -3045,13 +3044,7 @@ func (i *jsonAPIHandler) POSTBumpFee(w http.ResponseWriter, r *http.Request) {
 	}
 	newTxid, err := i.node.Wallet.BumpFee(*txHash)
 	if err != nil {
-		if err == spvwallet.BumpFeeAlreadyConfirmedError {
-			ErrorResponse(w, http.StatusBadRequest, err.Error())
-		} else if err == spvwallet.BumpFeeTransactionDeadError {
-			ErrorResponse(w, http.StatusMethodNotAllowed, err.Error())
-		} else if err == spvwallet.BumpFeeNotFoundError {
-			ErrorResponse(w, http.StatusNotFound, err.Error())
-		} else {
+		if err != nil {
 			ErrorResponse(w, http.StatusInternalServerError, err.Error())
 		}
 		return

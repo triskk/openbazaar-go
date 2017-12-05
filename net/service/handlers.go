@@ -12,7 +12,7 @@ import (
 	blocks "gx/ipfs/QmSn9Td7xgxm9EV7iEjTckpUWmWApggzPxu7eFGWkkpwin/go-block-format"
 	"strconv"
 
-	"github.com/OpenBazaar/wallet-interface"
+	"github.com/phoreproject/wallet-interface"
 	"github.com/phoreproject/btcd/chaincfg/chainhash"
 	"github.com/phoreproject/btcd/wire"
 	"github.com/phoreproject/btcutil"

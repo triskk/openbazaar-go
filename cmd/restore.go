@@ -12,7 +12,6 @@ import (
 	"io/ioutil"
 	"strings"
 
-	"github.com/ethereum/go-ethereum/log"
 	"github.com/ipfs/go-ipfs/commands"
 	ipfscore "github.com/ipfs/go-ipfs/core"
 	bitswap "github.com/ipfs/go-ipfs/exchange/bitswap/network"

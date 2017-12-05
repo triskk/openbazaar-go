@@ -21,19 +21,17 @@ import (
 	"strings"
 
 	bstk "github.com/OpenBazaar/go-blockstackclient"
-	"github.com/OpenBazaar/wallet-interface"
-	"github.com/phoreproject/btcd/chaincfg"
-	"github.com/phoreproject/btcutil/base58"
 	"github.com/fatih/color"
 	"github.com/ipfs/go-ipfs/commands"
 	ipfscore "github.com/ipfs/go-ipfs/core"
 	"github.com/ipfs/go-ipfs/core/corehttp"
-	bitswap "github.com/ipfs/go-ipfs/exchange/bitswap/network"
 	"github.com/ipfs/go-ipfs/namesys"
 	namepb "github.com/ipfs/go-ipfs/namesys/pb"
 	ipath "github.com/ipfs/go-ipfs/path"
 	ipfsrepo "github.com/ipfs/go-ipfs/repo"
 	"github.com/ipfs/go-ipfs/repo/config"
+	"github.com/phoreproject/btcd/chaincfg"
+	"github.com/phoreproject/btcutil/base58"
 	"github.com/phoreproject/openbazaar-go/api"
 	"github.com/phoreproject/openbazaar-go/bitcoin"
 	"github.com/phoreproject/openbazaar-go/bitcoin/exchange"
@@ -52,6 +50,7 @@ import (
 	sto "github.com/phoreproject/openbazaar-go/storage"
 	"github.com/phoreproject/openbazaar-go/storage/dropbox"
 	"github.com/phoreproject/openbazaar-go/storage/selfhosted"
+	"github.com/phoreproject/wallet-interface"
 
 	routing "gx/ipfs/QmPR2JzfKd9poHx9XBhzoFeBBC31ZM3W5iUPKJZWyaoZZm/go-libp2p-routing"
 	pstore "gx/ipfs/QmPgDWmTmuzvP7QE5zwo1TmjbJme9pmZHNujB2453jkCTr/go-libp2p-peerstore"
@@ -94,8 +93,6 @@ var (
 
 type Start struct {
 	Password             string   `short:"p" long:"password" description:"the encryption password if the database is encrypted"`
-	Testnet              bool     `short:"t" long:"testnet" description:"use the test network"`
-	Regtest              bool     `short:"r" long:"regtest" description:"run in regression test mode"`
 	LogLevel             string   `short:"l" long:"loglevel" description:"set the logging level [debug, info, notice, warning, error, critical]" defaut:"debug"`
 	NoLogFiles           bool     `short:"f" long:"nologfiles" description:"save logs on disk"`
 	AllowIP              []string `short:"a" long:"allowip" description:"only allow API connections from these IPs"`
@@ -115,18 +112,11 @@ type Start struct {
 func (x *Start) Execute(args []string) error {
 	printSplashScreen(x.Verbose)
 
-	if x.Testnet && x.Regtest {
-		return errors.New("Invalid combination of testnet and regtest modes")
-	}
-
 	if x.Tor && x.DualStack {
 		return errors.New("Invalid combination of tor and dual stack modes")
 	}
 
 	isTestnet := false
-	if x.Testnet || x.Regtest {
-		isTestnet = true
-	}
 
 	// Set repo path
 	repoPath, err := repo.GetRepoPath(isTestnet)
@@ -289,21 +279,6 @@ func (x *Start) Execute(args []string) error {
 		return err
 	}
 	cfg.Identity = identity
-
-	// Setup testnet
-	if x.Testnet {
-		testnetBootstrapAddrs, err := repo.GetTestnetBootstrapAddrs(configFile)
-		if err != nil {
-			log.Error(err)
-			return err
-		}
-		cfg.Bootstrap = testnetBootstrapAddrs
-		dht.ProtocolDHT = "/openbazaar/kad/testnet/1.0.0"
-		bitswap.ProtocolBitswap = "/openbazaar/bitswap/testnet/1.1.0"
-		service.ProtocolOpenBazaar = "/openbazaar/app/testnet/1.0.0"
-
-		dataSharing.PushTo = []string{}
-	}
 
 	onionAddr, err := obnet.MaybeCreateHiddenServiceKey(repoPath)
 	if err != nil {
@@ -485,17 +460,7 @@ func (x *Start) Execute(args []string) error {
 		log.Error(err)
 		return err
 	}
-	var params chaincfg.Params
-	if x.Testnet {
-		params = chaincfg.TestNet3Params
-	} else if x.Regtest {
-		params = chaincfg.RegressionNetParams
-	} else {
-		params = chaincfg.MainNetParams
-	}
-	if x.Regtest && strings.ToLower(walletCfg.Type) == "spvwallet" && walletCfg.TrustedPeer == "" {
-		return errors.New("Trusted peer must be set if using regtest with the spvwallet")
-	}
+	params := chaincfg.MainNetParams
 
 	var resyncManager *resync.ResyncManager
 	var cryptoWallet wallet.Wallet

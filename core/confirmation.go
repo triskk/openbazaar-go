@@ -8,7 +8,7 @@ import (
 
 	"time"
 
-	"github.com/OpenBazaar/wallet-interface"
+	"github.com/phoreproject/wallet-interface"
 	"github.com/phoreproject/btcd/chaincfg/chainhash"
 	"github.com/phoreproject/btcd/wire"
 	hd "github.com/phoreproject/btcutil/hdkeychain"

@@ -5,8 +5,7 @@ import (
 	"net/http"
 	"time"
 
-	"github.com/OpenBazaar/wallet-interface"
-	"github.com/ethereum/go-ethereum/log"
+	"github.com/phoreproject/wallet-interface"
 	"github.com/phoreproject/btcd/chaincfg/chainhash"
 	"github.com/phoreproject/btcd/rpcclient"
 )
@@ -32,7 +31,8 @@ func (l *NotificationListener) notify(w http.ResponseWriter, r *http.Request) {
 		log.Error(err)
 		return
 	}
-	txInfo, err := l.client.GetTransaction(hash)
+	includeWatchOnly := true
+	txInfo, err := l.client.GetTransaction(hash, &includeWatchOnly)
 	var outputs []wallet.TransactionOutput
 	for i, txout := range tx.MsgTx().TxOut {
 		out := wallet.TransactionOutput{ScriptPubKey: txout.PkScript, Value: txout.Value, Index: uint32(i)}

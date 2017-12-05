@@ -5,7 +5,7 @@ import (
 	"sync"
 	"time"
 
-	"github.com/OpenBazaar/wallet-interface"
+	"github.com/phoreproject/wallet-interface"
 	"github.com/phoreproject/btcd/chaincfg/chainhash"
 	"github.com/golang/protobuf/proto"
 	"github.com/golang/protobuf/ptypes"

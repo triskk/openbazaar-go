@@ -4,7 +4,7 @@ import (
 	"database/sql"
 	"encoding/json"
 	"github.com/OpenBazaar/jsonpb"
-	"github.com/OpenBazaar/wallet-interface"
+	"github.com/phoreproject/wallet-interface"
 	btc "github.com/phoreproject/btcutil"
 	"github.com/phoreproject/openbazaar-go/pb"
 	"github.com/phoreproject/openbazaar-go/repo"

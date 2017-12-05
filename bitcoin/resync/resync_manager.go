@@ -3,7 +3,7 @@ package resync
 import (
 	"time"
 
-	"github.com/OpenBazaar/wallet-interface"
+	"github.com/phoreproject/wallet-interface"
 	"github.com/op/go-logging"
 	"github.com/phoreproject/openbazaar-go/repo"
 )

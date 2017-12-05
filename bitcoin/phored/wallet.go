@@ -12,9 +12,6 @@ import (
 	"strings"
 	"time"
 
-	"github.com/OpenBazaar/spvwallet"
-	wallet "github.com/OpenBazaar/wallet-interface"
-	"github.com/btcsuite/btcwallet/wallet/txrules"
 	"github.com/op/go-logging"
 	"github.com/phoreproject/btcd/blockchain"
 	"github.com/phoreproject/btcd/btcec"
@@ -27,6 +24,9 @@ import (
 	"github.com/phoreproject/btcutil/coinset"
 	hd "github.com/phoreproject/btcutil/hdkeychain"
 	"github.com/phoreproject/btcutil/txsort"
+	"github.com/phoreproject/btcwallet/wallet/txrules"
+	"github.com/phoreproject/spvwallet"
+	wallet "github.com/phoreproject/wallet-interface"
 	b39 "github.com/tyler-smith/go-bip39"
 )
 

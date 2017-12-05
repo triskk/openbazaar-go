@@ -3,7 +3,7 @@ package db
 import (
 	"bytes"
 	"database/sql"
-	"github.com/OpenBazaar/wallet-interface"
+	"github.com/phoreproject/wallet-interface"
 	"github.com/phoreproject/btcd/chaincfg/chainhash"
 	"github.com/phoreproject/btcd/wire"
 	"sync"

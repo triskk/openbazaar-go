@@ -6,7 +6,7 @@ import (
 	"testing"
 	"time"
 
-	"github.com/OpenBazaar/wallet-interface"
+	"github.com/phoreproject/wallet-interface"
 	"github.com/phoreproject/btcd/chaincfg"
 	"github.com/phoreproject/btcutil"
 	"github.com/golang/protobuf/ptypes"

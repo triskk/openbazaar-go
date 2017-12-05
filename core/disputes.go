@@ -13,7 +13,7 @@ import (
 
 	dht "gx/ipfs/QmUCS9EnqNq1kCnJds2eLDypBiS21aSiCf1MVzSUVB9TGA/go-libp2p-kad-dht"
 
-	"github.com/OpenBazaar/wallet-interface"
+	"github.com/phoreproject/wallet-interface"
 	"github.com/phoreproject/btcutil"
 	hd "github.com/phoreproject/btcutil/hdkeychain"
 	"github.com/golang/protobuf/proto"

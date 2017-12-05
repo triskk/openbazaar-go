@@ -12,7 +12,6 @@ import (
 	ma "gx/ipfs/QmXY77cVe7rVRQXZZQRioukUM7aRW3BTcAgJe12MCtb3Ji/go-multiaddr"
 	"sync"
 
-	"github.com/OpenBazaar/wallet-interface"
 	"github.com/ipfs/go-ipfs/commands"
 	"github.com/ipfs/go-ipfs/core"
 	"github.com/op/go-logging"
@@ -25,6 +24,7 @@ import (
 	ret "github.com/phoreproject/openbazaar-go/net/retriever"
 	"github.com/phoreproject/openbazaar-go/repo"
 	sto "github.com/phoreproject/openbazaar-go/storage"
+	"github.com/phoreproject/wallet-interface"
 	"golang.org/x/net/context"
 	"golang.org/x/net/proxy"
 )

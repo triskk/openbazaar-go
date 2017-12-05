@@ -3,7 +3,7 @@ package bitcoin
 import (
 	"encoding/hex"
 
-	"github.com/OpenBazaar/wallet-interface"
+	"github.com/phoreproject/wallet-interface"
 	"github.com/phoreproject/btcd/chaincfg/chainhash"
 	"github.com/phoreproject/openbazaar-go/api/notifications"
 	"github.com/phoreproject/openbazaar-go/repo"

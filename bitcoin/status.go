@@ -3,7 +3,7 @@ package bitcoin
 import (
 	"context"
 	"encoding/json"
-	"github.com/OpenBazaar/wallet-interface"
+	"github.com/phoreproject/wallet-interface"
 	"time"
 )
 

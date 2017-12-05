@@ -10,7 +10,7 @@ import (
 	ma "gx/ipfs/QmXY77cVe7rVRQXZZQRioukUM7aRW3BTcAgJe12MCtb3Ji/go-multiaddr"
 	"time"
 
-	"github.com/OpenBazaar/wallet-interface"
+	"github.com/phoreproject/wallet-interface"
 	"github.com/phoreproject/btcd/chaincfg/chainhash"
 	"github.com/golang/protobuf/ptypes"
 	google_protobuf "github.com/golang/protobuf/ptypes/timestamp"
