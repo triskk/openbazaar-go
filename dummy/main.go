@@ -21,7 +21,7 @@ import (
 
 	"github.com/OpenBazaar/jsonpb"
 	"github.com/OpenBazaar/spvwallet"
-	"github.com/btcsuite/btcd/chaincfg"
+	"github.com/phoreproject/btcd/chaincfg"
 	"github.com/gogo/protobuf/proto"
 	"github.com/ipfs/go-ipfs/commands"
 	ipfscore "github.com/ipfs/go-ipfs/core"

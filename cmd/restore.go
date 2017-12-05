@@ -12,6 +12,7 @@ import (
 	"io/ioutil"
 	"strings"
 
+	"github.com/ethereum/go-ethereum/log"
 	"github.com/ipfs/go-ipfs/commands"
 	ipfscore "github.com/ipfs/go-ipfs/core"
 	bitswap "github.com/ipfs/go-ipfs/exchange/bitswap/network"
@@ -164,7 +165,7 @@ func (x *Restore) Execute(args []string) error {
 		log.Error(err)
 		return err
 	}
-	onionAddrString := "/onion/" + onionAddr + ":4003"
+	onionAddrString := "/onion/" + onionAddr + ":5003"
 	if x.Tor {
 		cfg.Addresses.Swarm = []string{}
 		cfg.Addresses.Swarm = append(cfg.Addresses.Swarm, onionAddrString)

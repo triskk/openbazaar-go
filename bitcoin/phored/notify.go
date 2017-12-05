@@ -6,8 +6,9 @@ import (
 	"time"
 
 	"github.com/OpenBazaar/wallet-interface"
-	"github.com/btcsuite/btcd/chaincfg/chainhash"
-	"github.com/phoreproject/rpcclient"
+	"github.com/ethereum/go-ethereum/log"
+	"github.com/phoreproject/btcd/chaincfg/chainhash"
+	"github.com/phoreproject/btcd/rpcclient"
 )
 
 type NotificationListener struct {

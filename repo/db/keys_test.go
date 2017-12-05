@@ -6,7 +6,7 @@ import (
 	"database/sql"
 	"encoding/hex"
 	"github.com/OpenBazaar/wallet-interface"
-	"github.com/btcsuite/btcd/btcec"
+	"github.com/phoreproject/btcd/btcec"
 	"testing"
 )
 

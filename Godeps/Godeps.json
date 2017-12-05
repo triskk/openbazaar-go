@@ -25,57 +25,57 @@
 			"Rev": "d97499360d1ecebc492ea66c7447ea948f417620"
 		},
 		{
-			"ImportPath": "github.com/btcsuite/btcd/addrmgr",
+			"ImportPath": "github.com/phoreproject/btcd/addrmgr",
 			"Comment": "BTCD_0_12_0_BETA-563-g7e5e6b4",
 			"Rev": "7e5e6b46106fc23c49c6f51609e6975d7decc966"
 		},
 		{
-			"ImportPath": "github.com/btcsuite/btcd/blockchain",
+			"ImportPath": "github.com/phoreproject/btcd/blockchain",
 			"Comment": "BTCD_0_12_0_BETA-563-g7e5e6b4",
 			"Rev": "7e5e6b46106fc23c49c6f51609e6975d7decc966"
 		},
 		{
-			"ImportPath": "github.com/btcsuite/btcd/btcec",
+			"ImportPath": "github.com/phoreproject/btcd/btcec",
 			"Comment": "BTCD_0_12_0_BETA-563-g7e5e6b4",
 			"Rev": "7e5e6b46106fc23c49c6f51609e6975d7decc966"
 		},
 		{
-			"ImportPath": "github.com/btcsuite/btcd/btcjson",
+			"ImportPath": "github.com/phoreproject/btcd/btcjson",
 			"Comment": "BTCD_0_12_0_BETA-563-g7e5e6b4",
 			"Rev": "7e5e6b46106fc23c49c6f51609e6975d7decc966"
 		},
 		{
-			"ImportPath": "github.com/btcsuite/btcd/chaincfg",
+			"ImportPath": "github.com/phoreproject/btcd/chaincfg",
 			"Comment": "BTCD_0_12_0_BETA-563-g7e5e6b4",
 			"Rev": "7e5e6b46106fc23c49c6f51609e6975d7decc966"
 		},
 		{
-			"ImportPath": "github.com/btcsuite/btcd/chaincfg/chainhash",
+			"ImportPath": "github.com/phoreproject/btcd/chaincfg/chainhash",
 			"Comment": "BTCD_0_12_0_BETA-563-g7e5e6b4",
 			"Rev": "7e5e6b46106fc23c49c6f51609e6975d7decc966"
 		},
 		{
-			"ImportPath": "github.com/btcsuite/btcd/connmgr",
+			"ImportPath": "github.com/phoreproject/btcd/connmgr",
 			"Comment": "BTCD_0_12_0_BETA-563-g7e5e6b4",
 			"Rev": "7e5e6b46106fc23c49c6f51609e6975d7decc966"
 		},
 		{
-			"ImportPath": "github.com/btcsuite/btcd/database",
+			"ImportPath": "github.com/phoreproject/btcd/database",
 			"Comment": "BTCD_0_12_0_BETA-563-g7e5e6b4",
 			"Rev": "7e5e6b46106fc23c49c6f51609e6975d7decc966"
 		},
 		{
-			"ImportPath": "github.com/btcsuite/btcd/peer",
+			"ImportPath": "github.com/phoreproject/btcd/peer",
 			"Comment": "BTCD_0_12_0_BETA-563-g7e5e6b4",
 			"Rev": "7e5e6b46106fc23c49c6f51609e6975d7decc966"
 		},
 		{
-			"ImportPath": "github.com/btcsuite/btcd/txscript",
+			"ImportPath": "github.com/phoreproject/btcd/txscript",
 			"Comment": "BTCD_0_12_0_BETA-563-g7e5e6b4",
 			"Rev": "7e5e6b46106fc23c49c6f51609e6975d7decc966"
 		},
 		{
-			"ImportPath": "github.com/btcsuite/btcd/wire",
+			"ImportPath": "github.com/phoreproject/btcd/wire",
 			"Comment": "BTCD_0_12_0_BETA-563-g7e5e6b4",
 			"Rev": "7e5e6b46106fc23c49c6f51609e6975d7decc966"
 		},
@@ -89,37 +89,37 @@
 			"Rev": "62b15b5db2619224d174239e3f71f6f37305346d"
 		},
 		{
-			"ImportPath": "github.com/btcsuite/btcutil",
+			"ImportPath": "github.com/phoreproject/btcutil",
 			"Comment": "BTCUTIL_0_5_0-32-g501929d",
 			"Rev": "501929d3d046174c3d39f0ea54ece471aa17238c"
 		},
 		{
-			"ImportPath": "github.com/btcsuite/btcutil/base58",
+			"ImportPath": "github.com/phoreproject/btcutil/base58",
 			"Comment": "BTCUTIL_0_5_0-32-g501929d",
 			"Rev": "501929d3d046174c3d39f0ea54ece471aa17238c"
 		},
 		{
-			"ImportPath": "github.com/btcsuite/btcutil/bech32",
+			"ImportPath": "github.com/phoreproject/btcutil/bech32",
 			"Comment": "BTCUTIL_0_5_0-32-g501929d",
 			"Rev": "501929d3d046174c3d39f0ea54ece471aa17238c"
 		},
 		{
-			"ImportPath": "github.com/btcsuite/btcutil/bloom",
+			"ImportPath": "github.com/phoreproject/btcutil/bloom",
 			"Comment": "BTCUTIL_0_5_0-32-g501929d",
 			"Rev": "501929d3d046174c3d39f0ea54ece471aa17238c"
 		},
 		{
-			"ImportPath": "github.com/btcsuite/btcutil/coinset",
+			"ImportPath": "github.com/phoreproject/btcutil/coinset",
 			"Comment": "BTCUTIL_0_5_0-32-g501929d",
 			"Rev": "501929d3d046174c3d39f0ea54ece471aa17238c"
 		},
 		{
-			"ImportPath": "github.com/btcsuite/btcutil/hdkeychain",
+			"ImportPath": "github.com/phoreproject/btcutil/hdkeychain",
 			"Comment": "BTCUTIL_0_5_0-32-g501929d",
 			"Rev": "501929d3d046174c3d39f0ea54ece471aa17238c"
 		},
 		{
-			"ImportPath": "github.com/btcsuite/btcutil/txsort",
+			"ImportPath": "github.com/phoreproject/btcutil/txsort",
 			"Comment": "BTCUTIL_0_5_0-32-g501929d",
 			"Rev": "501929d3d046174c3d39f0ea54ece471aa17238c"
 		},

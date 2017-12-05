@@ -6,7 +6,7 @@ import (
 	"time"
 
 	"github.com/OpenBazaar/wallet-interface"
-	"github.com/btcsuite/btcd/chaincfg/chainhash"
+	"github.com/phoreproject/btcd/chaincfg/chainhash"
 	"github.com/golang/protobuf/proto"
 	"github.com/golang/protobuf/ptypes"
 	"github.com/op/go-logging"

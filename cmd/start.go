@@ -22,8 +22,8 @@ import (
 
 	bstk "github.com/OpenBazaar/go-blockstackclient"
 	"github.com/OpenBazaar/wallet-interface"
-	"github.com/btcsuite/btcd/chaincfg"
-	"github.com/btcsuite/btcutil/base58"
+	"github.com/phoreproject/btcd/chaincfg"
+	"github.com/phoreproject/btcutil/base58"
 	"github.com/fatih/color"
 	"github.com/ipfs/go-ipfs/commands"
 	ipfscore "github.com/ipfs/go-ipfs/core"

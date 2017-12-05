@@ -16,7 +16,7 @@ import (
 	"time"
 
 	"github.com/OpenBazaar/jsonpb"
-	"github.com/btcsuite/btcd/chaincfg"
+	"github.com/phoreproject/btcd/chaincfg"
 	"github.com/golang/protobuf/proto"
 	"github.com/kennygrant/sanitize"
 	"github.com/microcosm-cc/bluemonday"

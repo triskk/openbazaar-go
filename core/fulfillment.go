@@ -9,7 +9,7 @@ import (
 	"time"
 
 	"github.com/OpenBazaar/wallet-interface"
-	hd "github.com/btcsuite/btcutil/hdkeychain"
+	hd "github.com/phoreproject/btcutil/hdkeychain"
 	"github.com/golang/protobuf/proto"
 	"github.com/golang/protobuf/ptypes"
 	"github.com/phoreproject/openbazaar-go/pb"

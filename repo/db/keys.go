@@ -5,7 +5,7 @@ import (
 	"encoding/hex"
 	"errors"
 	"github.com/OpenBazaar/wallet-interface"
-	"github.com/btcsuite/btcd/btcec"
+	"github.com/phoreproject/btcd/btcec"
 	"strconv"
 	"sync"
 )

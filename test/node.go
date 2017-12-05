@@ -6,7 +6,7 @@ import (
 	"gx/ipfs/QmaPbCnUMBohSGo3KnxEa2bHqyJVVeEEcwtqJAYxerieBo/go-libp2p-crypto"
 
 	"github.com/OpenBazaar/spvwallet"
-	"github.com/btcsuite/btcd/chaincfg"
+	"github.com/phoreproject/btcd/chaincfg"
 	"github.com/phoreproject/openbazaar-go/core"
 	"github.com/phoreproject/openbazaar-go/ipfs"
 	"github.com/phoreproject/openbazaar-go/net"

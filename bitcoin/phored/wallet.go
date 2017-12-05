@@ -13,29 +13,31 @@ import (
 	"time"
 
 	"github.com/OpenBazaar/spvwallet"
-	"github.com/OpenBazaar/wallet-interface"
-	"github.com/btcsuite/btcd/blockchain"
-	"github.com/btcsuite/btcd/btcec"
-	"github.com/btcsuite/btcd/chaincfg"
-	"github.com/btcsuite/btcd/chaincfg/chainhash"
-	"github.com/btcsuite/btcd/txscript"
-	"github.com/btcsuite/btcd/wire"
-	"github.com/btcsuite/btcutil/coinset"
-	hd "github.com/btcsuite/btcutil/hdkeychain"
-	"github.com/btcsuite/btcutil/txsort"
+	wallet "github.com/OpenBazaar/wallet-interface"
 	"github.com/btcsuite/btcwallet/wallet/txrules"
 	"github.com/op/go-logging"
-	"github.com/phoreproject/rpcclient"
-	btc "github.com/phoreproject/rpcclient/util"
+	"github.com/phoreproject/btcd/blockchain"
+	"github.com/phoreproject/btcd/btcec"
+	"github.com/phoreproject/btcd/chaincfg"
+	"github.com/phoreproject/btcd/chaincfg/chainhash"
+	"github.com/phoreproject/btcd/rpcclient"
+	"github.com/phoreproject/btcd/txscript"
+	"github.com/phoreproject/btcd/wire"
+	btc "github.com/phoreproject/btcutil"
+	"github.com/phoreproject/btcutil/coinset"
+	hd "github.com/phoreproject/btcutil/hdkeychain"
+	"github.com/phoreproject/btcutil/txsort"
 	b39 "github.com/tyler-smith/go-bip39"
 )
 
 var log = logging.MustGetLogger("bitcoind")
 
 const (
+	// Account is the name for the Bitcoin wallet account
 	Account = "OpenBazaar"
 )
 
+// BitcoindWallet represents a wallet based on JSON-RPC and Bitcoind
 type BitcoindWallet struct {
 	params           *chaincfg.Params
 	repoPath         string
@@ -51,8 +53,8 @@ type BitcoindWallet struct {
 	scriptsToAdd     [][]byte
 }
 
-var connCfg *rpcclient.ConnConfig = &rpcclient.ConnConfig{
-	Host:                 "localhost:8332",
+var connCfg = &rpcclient.ConnConfig{
+	Host:                 "localhost:11772",
 	HTTPPostMode:         true, // Bitcoin core only supports HTTP POST mode
 	DisableTLS:           true, // Bitcoin core does not provide TLS by default
 	DisableAutoReconnect: false,
@@ -63,10 +65,6 @@ func NewBitcoindWallet(mnemonic string, params *chaincfg.Params, repoPath string
 	seed := b39.NewSeed(mnemonic, "")
 	mPrivKey, _ := hd.NewMaster(seed, params)
 	mPubKey, _ := mPrivKey.Neuter()
-
-	if params.Name == chaincfg.TestNet3Params.Name || params.Name == chaincfg.RegressionNetParams.Name {
-		connCfg.Host = "localhost:18332"
-	}
 
 	connCfg.User = username
 	connCfg.Pass = password
@@ -96,11 +94,6 @@ func (w *BitcoindWallet) BuildArguments(rescan bool) []string {
 	}
 	args = append(args, "-torcontrol=127.0.0.1:"+strconv.Itoa(w.controlPort))
 
-	if w.params.Name == chaincfg.TestNet3Params.Name {
-		args = append(args, "-testnet")
-	} else if w.params.Name == chaincfg.RegressionNetParams.Name {
-		args = append(args, "-regtest")
-	}
 	if w.trustedPeer != "" {
 		args = append(args, "-connect="+w.trustedPeer)
 	}

@@ -7,8 +7,8 @@ import (
 	"time"
 
 	"github.com/OpenBazaar/wallet-interface"
-	"github.com/btcsuite/btcd/chaincfg"
-	"github.com/btcsuite/btcutil"
+	"github.com/phoreproject/btcd/chaincfg"
+	"github.com/phoreproject/btcutil"
 	"github.com/golang/protobuf/ptypes"
 	"github.com/phoreproject/openbazaar-go/pb"
 )
