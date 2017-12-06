@@ -150,11 +150,7 @@ func (w *BitcoindWallet) shutdownIfActive() {
 }
 
 func (w *BitcoindWallet) CurrencyCode() string {
-	if w.params.Name == chaincfg.MainNetParams.Name {
-		return "btc"
-	} else {
-		return "tbtc"
-	}
+	return "phr"
 }
 
 func (w *BitcoindWallet) IsDust(amount int64) bool {

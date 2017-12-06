@@ -7,7 +7,6 @@ import (
 	"golang.org/x/net/proxy"
 	"net"
 	"net/http"
-	"reflect"
 	"strconv"
 	"sync"
 	"time"
@@ -29,10 +28,7 @@ type ExchangeRateDecoder interface {
 }
 
 // empty structs to tag the different ExchangeRateDecoder implementations
-type BitcoinAverageDecoder struct{}
-type BitPayDecoder struct{}
-type BlockchainInfoDecoder struct{}
-type BitcoinChartsDecoder struct{}
+type CMCDecoder struct{}
 
 type BitcoinPriceFetcher struct {
 	sync.Mutex
@@ -52,10 +48,7 @@ func NewBitcoinPriceFetcher(dialer proxy.Dialer) *BitcoinPriceFetcher {
 	client := &http.Client{Transport: tbTransport, Timeout: time.Minute}
 
 	b.providers = []*ExchangeRateProvider{
-		{"https://ticker.openbazaar.org/api", b.cache, client, BitcoinAverageDecoder{}},
-		{"https://bitpay.com/api/rates", b.cache, client, BitPayDecoder{}},
-		{"https://blockchain.info/ticker", b.cache, client, BlockchainInfoDecoder{}},
-		{"https://api.bitcoincharts.com/v1/weighted_prices.json", b.cache, client, BitcoinChartsDecoder{}},
+		{"https://api.coinmarketcap.com/v1/ticker/phore", b.cache, client, CMCDecoder{}},
 	}
 	go b.run()
 	return &b
@@ -134,79 +127,34 @@ func (b *BitcoinPriceFetcher) run() {
 }
 
 // Decoders
-func (b BitcoinAverageDecoder) decode(dat interface{}, cache map[string]float64) (err error) {
-	data := dat.(map[string]interface{})
-	for k, v := range data {
-		if k != "timestamp" {
-			val, ok := v.(map[string]interface{})
-			if !ok {
-				return errors.New(reflect.TypeOf(b).Name() + ".decode: Type assertion failed")
-			}
-			price, ok := val["last"].(float64)
-			if !ok {
-				return errors.New(reflect.TypeOf(b).Name() + ".decode: Type assertion failed, missing 'last' (float) field")
-			}
-			cache[k] = price
-		}
-	}
-	return nil
-}
-
-func (b BitPayDecoder) decode(dat interface{}, cache map[string]float64) (err error) {
+func (b CMCDecoder) decode(dat interface{}, cache map[string]float64) (err error) {
 	data := dat.([]interface{})
-	for _, obj := range data {
-		code := obj.(map[string]interface{})
-		k, ok := code["code"].(string)
-		if !ok {
-			return errors.New(reflect.TypeOf(b).Name() + ".decode: Type assertion failed, missing 'code' (string) field")
-		}
-		price, ok := code["rate"].(float64)
-		if !ok {
-			return errors.New(reflect.TypeOf(b).Name() + ".decode: Type assertion failed, missing 'rate' (float) field")
-		}
-		cache[k] = price
-	}
-	return nil
-}
 
-func (b BlockchainInfoDecoder) decode(dat interface{}, cache map[string]float64) (err error) {
-	data := dat.(map[string]interface{})
-	for k, v := range data {
-		val, ok := v.(map[string]interface{})
-		if !ok {
-			return errors.New(reflect.TypeOf(b).Name() + ".decode: Type assertion failed")
-		}
-		price, ok := val["last"].(float64)
-		if !ok {
-			return errors.New(reflect.TypeOf(b).Name() + ".decode: Type assertion failed, missing 'last' (float) field")
-		}
-		cache[k] = price
+	if len(data) < 1 {
+		return errors.New("could not get currency")
 	}
-	return nil
-}
 
-func (b BitcoinChartsDecoder) decode(dat interface{}, cache map[string]float64) (err error) {
-	data := dat.(map[string]interface{})
-	for k, v := range data {
-		if k != "timestamp" {
-			val, ok := v.(map[string]interface{})
-			if !ok {
-				return errors.New("Type assertion failed")
-			}
-			p, ok := val["24h"]
-			if !ok {
-				continue
-			}
-			pr, ok := p.(string)
-			if !ok {
-				return errors.New("Type assertion failed")
-			}
-			price, err := strconv.ParseFloat(pr, 64)
-			if err != nil {
-				return err
-			}
-			cache[k] = price
-		}
+	priceInfo := data[0].(map[string]interface{})
+
+	priceUSDObj, found := priceInfo["price_usd"]
+
+	if !found {
+		return errors.New("could not get USD price")
 	}
+
+	priceUSDString, ok := priceUSDObj.(string)
+
+	if !ok {
+		return errors.New("could not decode current USD price")
+	}
+
+	priceUSD, err := strconv.ParseFloat(priceUSDString, 64)
+
+	if err != nil {
+		return errors.New("usd price is not a number")
+	}
+
+	cache["PHR"] = priceUSD
+
 	return nil
 }
