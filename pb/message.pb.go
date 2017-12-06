@@ -16,6 +16,8 @@ var _ = math.Inf
 
 type Message_MessageType int32
 
+var VERSION int32 = 0x2
+
 const (
 	Message_PING               Message_MessageType = 0
 	Message_CHAT               Message_MessageType = 1
@@ -120,13 +122,15 @@ type Message struct {
 	MessageType Message_MessageType   `protobuf:"varint,1,opt,name=messageType,enum=Message_MessageType" json:"messageType,omitempty"`
 	Payload     *google_protobuf1.Any `protobuf:"bytes,2,opt,name=payload" json:"payload,omitempty"`
 	RequestId   int32                 `protobuf:"varint,3,opt,name=requestId" json:"requestId,omitempty"`
+	Version     int32                 `protobuf:"varint,3,opt,name=version" json:"version,omitempty"`
 	IsResponse  bool                  `protobuf:"varint,4,opt,name=isResponse" json:"isResponse,omitempty"`
 }
 
-func (m *Message) Reset()                    { *m = Message{} }
-func (m *Message) String() string            { return proto.CompactTextString(m) }
-func (*Message) ProtoMessage()               {}
-func (*Message) Descriptor() ([]byte, []int) { return fileDescriptor3, []int{0} }
+func NewMessage(t Message_MessageType) Message { return Message{Version: VERSION, MessageType: t} }
+func (m *Message) Reset()                      { *m = Message{MessageType: m.MessageType, Version: m.Version} }
+func (m *Message) String() string              { return proto.CompactTextString(m) }
+func (*Message) ProtoMessage()                 {}
+func (*Message) Descriptor() ([]byte, []int)   { return fileDescriptor3, []int{0} }
 
 func (m *Message) GetMessageType() Message_MessageType {
 	if m != nil {

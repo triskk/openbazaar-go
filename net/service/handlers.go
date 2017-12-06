@@ -12,18 +12,18 @@ import (
 	blocks "gx/ipfs/QmSn9Td7xgxm9EV7iEjTckpUWmWApggzPxu7eFGWkkpwin/go-block-format"
 	"strconv"
 
-	"github.com/phoreproject/wallet-interface"
+	"github.com/golang/protobuf/proto"
+	"github.com/golang/protobuf/ptypes"
+	"github.com/golang/protobuf/ptypes/any"
 	"github.com/phoreproject/btcd/chaincfg/chainhash"
 	"github.com/phoreproject/btcd/wire"
 	"github.com/phoreproject/btcutil"
 	hd "github.com/phoreproject/btcutil/hdkeychain"
-	"github.com/golang/protobuf/proto"
-	"github.com/golang/protobuf/ptypes"
-	"github.com/golang/protobuf/ptypes/any"
 	"github.com/phoreproject/openbazaar-go/api/notifications"
 	"github.com/phoreproject/openbazaar-go/core"
 	"github.com/phoreproject/openbazaar-go/net"
 	"github.com/phoreproject/openbazaar-go/pb"
+	"github.com/phoreproject/wallet-interface"
 )
 
 // HandlerForMsgType returns a handler function for a given message type
@@ -249,11 +249,9 @@ func (service *OpenBazaarService) handleOrder(peer peer.ID, pmes *pb.Message, op
 	offline, _ := options.(bool)
 	errorResponse := func(error string) *pb.Message {
 		a := &any.Any{Value: []byte(error)}
-		m := &pb.Message{
-			MessageType: pb.Message_ERROR,
-			Payload:     a,
-		}
-		return m
+		m := pb.NewMessage(pb.Message_ERROR)
+		m.Payload = a
+		return &m
 	}
 	pro, _ := service.node.GetProfile()
 	if !pro.Vendor {
@@ -296,10 +294,8 @@ func (service *OpenBazaarService) handleOrder(peer peer.ID, pmes *pb.Message, op
 		if currentTime.After(purchaseTime) {
 			service.node.Datastore.Sales().SetNeedsResync(contract.VendorOrderConfirmation.OrderID, true)
 		}
-		m := pb.Message{
-			MessageType: pb.Message_ORDER_CONFIRMATION,
-			Payload:     a,
-		}
+		m := pb.NewMessage(pb.Message_ORDER_CONFIRMATION)
+		m.Payload = a
 		log.Debugf("Received addr-req ORDER message from %s", peer.Pretty())
 		return &m, nil
 	} else if contract.BuyerOrder.Payment.Method == pb.Order_Payment_DIRECT {
@@ -363,10 +359,8 @@ func (service *OpenBazaarService) handleOrder(peer peer.ID, pmes *pb.Message, op
 		if currentTime.After(purchaseTime) {
 			service.node.Datastore.Sales().SetNeedsResync(contract.VendorOrderConfirmation.OrderID, true)
 		}
-		m := pb.Message{
-			MessageType: pb.Message_ORDER_CONFIRMATION,
-			Payload:     a,
-		}
+		m := pb.NewMessage(pb.Message_ORDER_CONFIRMATION)
+		m.Payload = a
 		log.Debugf("Received moderated ORDER message from %s", peer.Pretty())
 		return &m, nil
 	} else if contract.BuyerOrder.Payment.Method == pb.Order_Payment_MODERATED && offline {
