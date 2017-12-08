@@ -108,11 +108,6 @@ func (service *OpenBazaarService) handleNewMessage(s inet.Stream, incoming bool)
 			return
 		}
 
-		if pmes.Version != pb.VERSION { // If their version is not the same as our version, block them.
-			service.node.BanManager.AddBlockedId(mPeer)
-			return
-		}
-
 		if pmes.IsResponse {
 			ms.requestlk.Lock()
 			ch, ok := ms.requests[pmes.RequestId]

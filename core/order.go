@@ -15,16 +15,16 @@ import (
 	"strconv"
 
 	"github.com/OpenBazaar/jsonpb"
-	"github.com/golang/protobuf/proto"
-	"github.com/golang/protobuf/ptypes"
-	ipfspath "github.com/ipfs/go-ipfs/path"
+	"github.com/phoreproject/wallet-interface"
 	"github.com/phoreproject/btcd/chaincfg"
 	"github.com/phoreproject/btcd/chaincfg/chainhash"
 	"github.com/phoreproject/btcd/wire"
 	hd "github.com/phoreproject/btcutil/hdkeychain"
+	"github.com/golang/protobuf/proto"
+	"github.com/golang/protobuf/ptypes"
+	ipfspath "github.com/ipfs/go-ipfs/path"
 	"github.com/phoreproject/openbazaar-go/ipfs"
 	"github.com/phoreproject/openbazaar-go/pb"
-	"github.com/phoreproject/wallet-interface"
 )
 
 type option struct {
@@ -201,9 +201,10 @@ func (n *OpenBazaarNode) Purchase(data *PurchaseData) (orderId string, paymentAd
 			if err != nil {
 				return "", "", 0, false, err
 			}
-			m := pb.NewMessage(pb.Message_ORDER)
-			m.Payload = any
-
+			m := pb.Message{
+				MessageType: pb.Message_ORDER,
+				Payload:     any,
+			}
 			k, err := crypto.UnmarshalPublicKey(contract.VendorListings[0].VendorID.Pubkeys.Identity)
 			if err != nil {
 				return "", "", 0, false, err
@@ -342,9 +343,10 @@ func (n *OpenBazaarNode) Purchase(data *PurchaseData) (orderId string, paymentAd
 			if err != nil {
 				return "", "", 0, false, err
 			}
-			m := pb.NewMessage(pb.Message_ORDER)
-			m.Payload = any
-
+			m := pb.Message{
+				MessageType: pb.Message_ORDER,
+				Payload:     any,
+			}
 			k, err := crypto.UnmarshalPublicKey(contract.VendorListings[0].VendorID.Pubkeys.Identity)
 			if err != nil {
 				return "", "", 0, false, err
