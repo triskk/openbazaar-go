@@ -17,6 +17,8 @@ import (
 	"github.com/phoreproject/openbazaar-go/pb"
 )
 
+// NewOrderConfirmation method creates order confirmation for a new order with order ID, payment address, timestamp, rating signatures,
+// and new total if necessary, and signs order confirmation for the contract.
 func (n *OpenBazaarNode) NewOrderConfirmation(contract *pb.RicardianContract, addressRequest, calculateNewTotal bool) (*pb.RicardianContract, error) {
 	oc := new(pb.OrderConfirmation)
 	// Calculate order ID
@@ -77,6 +79,8 @@ func (n *OpenBazaarNode) NewOrderConfirmation(contract *pb.RicardianContract, ad
 	return contract, nil
 }
 
+// ConfirmOfflineOrder method creates order confirmation, handles unmoderated payment methods,
+// sends the order confirmation, adds the sale to the contract, and changes the status of the order to awaiting fulfillment.
 func (n *OpenBazaarNode) ConfirmOfflineOrder(contract *pb.RicardianContract, records []*wallet.TransactionRecord) error {
 	contract, err := n.NewOrderConfirmation(contract, false, false)
 	if err != nil {
@@ -147,6 +151,8 @@ func (n *OpenBazaarNode) ConfirmOfflineOrder(contract *pb.RicardianContract, rec
 	return nil
 }
 
+// RejectOfflineOrder method rejects an order, sending a refund for moderated payment types, sending
+// a reject message, and updating the state of the order to declined.
 func (n *OpenBazaarNode) RejectOfflineOrder(contract *pb.RicardianContract, records []*wallet.TransactionRecord) error {
 	orderId, err := n.CalcOrderID(contract.BuyerOrder)
 	if err != nil {
@@ -236,6 +242,8 @@ func (n *OpenBazaarNode) RejectOfflineOrder(contract *pb.RicardianContract, reco
 	return nil
 }
 
+// ValidateOrderConfirmation method confirms the order ID, requested payment amount, rating signatures 
+// for moderated payments, wallet address, and signatures on order confirmation.
 func (n *OpenBazaarNode) ValidateOrderConfirmation(contract *pb.RicardianContract, validateAddress bool) error {
 	orderID, err := n.CalcOrderID(contract.BuyerOrder)
 	if err != nil {
@@ -290,6 +298,7 @@ func (n *OpenBazaarNode) ValidateOrderConfirmation(contract *pb.RicardianContrac
 	return nil
 }
 
+// SignOrderConfirmation method appends signatures to the order confirmation of the contract.
 func (n *OpenBazaarNode) SignOrderConfirmation(contract *pb.RicardianContract) (*pb.RicardianContract, error) {
 	serializedOrderConf, err := proto.Marshal(contract.VendorOrderConfirmation)
 	if err != nil {

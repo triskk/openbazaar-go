@@ -57,14 +57,14 @@ func (r *PointerRepublisher) Republish() {
 			if time.Now().Sub(p.Timestamp) > kPointerExpiration {
 				r.db.Pointers().Delete(p.Value.ID)
 			} else {
-				go ipfs.PublishPointer(r.ipfsNode, ctx, p)
+				go ipfs.PublishPointer(ctx, r.ipfsNode, p)
 				for _, peer := range r.pushNodes {
 					go ipfs.PutPointerToPeer(r.ipfsNode, context.Background(), peer, p)
 				}
 			}
 		case ipfs.MODERATOR:
 			if republishModerator {
-				go ipfs.PublishPointer(r.ipfsNode, ctx, p)
+				go ipfs.PublishPointer(ctx, r.ipfsNode, p)
 			} else {
 				r.db.Pointers().Delete(p.Value.ID)
 			}

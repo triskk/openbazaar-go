@@ -23,18 +23,21 @@ import (
 	pb "gx/ipfs/QmUCS9EnqNq1kCnJds2eLDypBiS21aSiCf1MVzSUVB9TGA/go-libp2p-kad-dht/pb"
 )
 
+// MAGIC is a constant combined with a hashed key when creating a magic ID.
 const MAGIC string = "000000000000000000000000"
 
+// Purpose type is used to enumerate and distinguish the different purposes of pointers.
 type Purpose int
 
 const (
+	// MESSAGE and other constants set integer values for each pointer purpose.
 	MESSAGE   Purpose = 1
 	MODERATOR Purpose = 2
 	TAG       Purpose = 3
 	CHANNEL   Purpose = 4
 )
 
-/* A pointer is a custom provider inserted into the DHT which points to a location of a file.
+/* Pointer is a custom provider inserted into the DHT which points to a location of a file.
    For offline messaging purposes we use a hash of the recipient's ID as the key and set the
    provider to the location of the ciphertext. We set the Peer ID of the provider object to
    a magic number so we distinguish it from regular providers and use a longer ttl.
@@ -47,6 +50,7 @@ type Pointer struct {
 	CancelID  *peer.ID
 }
 
+// NewPointer creates a new pointer.
 // entropy is a sequence of bytes that should be deterministic based on the content of the pointer
 // it is hashed and used to fill the remaining 20 bytes of the magic id
 func NewPointer(mhKey multihash.Multihash, prefixLen int, addr ma.Multiaddr, entropy []byte) (Pointer, error) {
@@ -67,32 +71,35 @@ func NewPointer(mhKey multihash.Multihash, prefixLen int, addr ma.Multiaddr, ent
 	return Pointer{Cid: k, Value: pi}, nil
 }
 
-func PublishPointer(node *core.IpfsNode, ctx context.Context, pointer Pointer) error {
-	return addPointer(node, ctx, pointer.Cid, pointer.Value)
+// PublishPointer adds and publishes pointer to the dht.
+func PublishPointer(ctx context.Context, node *core.IpfsNode, pointer Pointer) error {
+	return addPointer(ctx, node, pointer.Cid, pointer.Value)
 }
 
-// Fetch pointers from the dht. They will be returned asynchronously.
-func FindPointersAsync(dht *routing.IpfsDHT, ctx context.Context, mhKey multihash.Multihash, prefixLen int) <-chan ps.PeerInfo {
+// FindPointersAsync fetches pointers from the dht. They will be returned asynchronously.
+func FindPointersAsync(ctx context.Context, dht *routing.IpfsDHT, mhKey multihash.Multihash, prefixLen int) <-chan ps.PeerInfo {
 	keyhash := CreatePointerKey(mhKey, prefixLen)
 	key, _ := cid.Decode(keyhash.B58String())
 	peerout := dht.FindProvidersAsync(ctx, key, 100000)
 	return peerout
 }
 
-// Fetch pointers from the dht
-func FindPointers(dht *routing.IpfsDHT, ctx context.Context, mhKey multihash.Multihash, prefixLen int) ([]ps.PeerInfo, error) {
+// FindPointers fetches pointers from the dht
+func FindPointers(ctx context.Context, dht *routing.IpfsDHT, mhKey multihash.Multihash, prefixLen int) ([]ps.PeerInfo, error) {
 	var providers []ps.PeerInfo
-	for p := range FindPointersAsync(dht, ctx, mhKey, prefixLen) {
+	for p := range FindPointersAsync(ctx, dht, mhKey, prefixLen) {
 		providers = append(providers, p)
 	}
 	return providers, nil
 }
 
+// PutPointerToPeer routes a dht pointer to a peer
 func PutPointerToPeer(node *core.IpfsNode, ctx context.Context, peer peer.ID, pointer Pointer) error {
 	dht := node.Routing.(*routing.IpfsDHT)
 	return putPointer(ctx, dht, peer, pointer.Value, pointer.Cid.KeyString())
 }
 
+// GetPointersFromPeer sends a message to request dht pointers from a peer
 func GetPointersFromPeer(node *core.IpfsNode, ctx context.Context, p peer.ID, key *cid.Cid) ([]*ps.PeerInfo, error) {
 	dht := node.Routing.(*routing.IpfsDHT)
 	pmes := pb.NewMessage(pb.Message_GET_PROVIDERS, key.KeyString(), 0)
@@ -103,7 +110,7 @@ func GetPointersFromPeer(node *core.IpfsNode, ctx context.Context, p peer.ID, ke
 	return dhtpb.PBPeersToPeerInfos(resp.GetProviderPeers()), nil
 }
 
-func addPointer(node *core.IpfsNode, ctx context.Context, k *cid.Cid, pi ps.PeerInfo) error {
+func addPointer(ctx context.Context, node *core.IpfsNode, k *cid.Cid, pi ps.PeerInfo) error {
 	dht := node.Routing.(*routing.IpfsDHT)
 	peers, err := dht.GetClosestPeers(ctx, k.KeyString())
 	if err != nil {

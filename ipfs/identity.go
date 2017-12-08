@@ -10,6 +10,7 @@ import (
 	libp2p "gx/ipfs/QmaPbCnUMBohSGo3KnxEa2bHqyJVVeEEcwtqJAYxerieBo/go-libp2p-crypto"
 )
 
+// IdentityFromKey returns IPFS peer identity based on private key
 func IdentityFromKey(privkey []byte) (config.Identity, error) {
 
 	ident := config.Identity{}
@@ -31,6 +32,7 @@ func IdentityFromKey(privkey []byte) (config.Identity, error) {
 	return ident, nil
 }
 
+// IdentityKeyFromSeed generates an OpenBazaar seed IPFS key pair
 func IdentityKeyFromSeed(seed []byte, bits int) ([]byte, error) {
 	hmac := hmac.New(sha256.New, []byte("OpenBazaar seed"))
 	hmac.Write(seed)

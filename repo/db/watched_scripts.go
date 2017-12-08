@@ -6,11 +6,14 @@ import (
 	"sync"
 )
 
+// WatchScriptsDB type definition.
+// Sets a pointer to SQL database and syncs reader/writer mutex-based lock.
 type WatchedScriptsDB struct {
 	db   *sql.DB
 	lock sync.RWMutex
 }
 
+// WatchdScriptsDB Put method insert and replace operations based on watched script public keys.
 func (w *WatchedScriptsDB) Put(scriptPubKey []byte) error {
 	w.lock.Lock()
 	defer w.lock.Unlock()
@@ -30,6 +33,7 @@ func (w *WatchedScriptsDB) Put(scriptPubKey []byte) error {
 	return nil
 }
 
+// WatchedScriptsDB GetAll() method Returns all watched script public keys.
 func (w *WatchedScriptsDB) GetAll() ([][]byte, error) {
 	w.lock.RLock()
 	defer w.lock.RUnlock()
@@ -54,6 +58,7 @@ func (w *WatchedScriptsDB) GetAll() ([][]byte, error) {
 	return ret, nil
 }
 
+// WatchedScriptsDB Delete method deletes a watched script based on its public key.
 func (w *WatchedScriptsDB) Delete(scriptPubKey []byte) error {
 	w.lock.Lock()
 	defer w.lock.Unlock()

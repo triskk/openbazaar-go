@@ -77,14 +77,14 @@ func (n *OpenBazaarNode) SetSelfAsModerator(moderator *pb.Moderator) error {
 		if err != nil {
 			return err
 		}
-		go ipfs.PublishPointer(n.IpfsNode, ctx, pointer)
+		go ipfs.PublishPointer(ctx, n.IpfsNode, pointer)
 		pointer.Purpose = ipfs.MODERATOR
 		err = n.Datastore.Pointers().Put(pointer)
 		if err != nil {
 			return err
 		}
 	} else {
-		go ipfs.PublishPointer(n.IpfsNode, ctx, pointers[0])
+		go ipfs.PublishPointer(ctx, n.IpfsNode, pointers[0])
 	}
 	return nil
 }

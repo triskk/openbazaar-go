@@ -8,6 +8,7 @@ import (
 	"net"
 )
 
+// LookupTXTFunc is used by DNSResolver
 type LookupTXTFunc func(name string) (txt []string, err error)
 
 // DNSResolver implements a Resolver on DNS domains
@@ -25,7 +26,7 @@ func (r *DNSResolver) Resolve(ctx context.Context, name string) (peer.ID, error)
 	return r.resolveOnce(ctx, name)
 }
 
-// Resolve implements Resolver.
+// Domains returns an array of dns domains in the name resolver.
 func (r *DNSResolver) Domains() []string {
 	return []string{"dns"}
 }
