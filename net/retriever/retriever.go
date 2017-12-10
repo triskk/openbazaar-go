@@ -104,7 +104,7 @@ func (m *MessageRetriever) fetchPointers(useDHT bool) {
 		if useDHT {
 			pwg.Add(1)
 			go func(c chan ps.PeerInfo) {
-				iout := ipfs.FindPointersAsync(m.node.Routing.(*routing.IpfsDHT), ctx, mh, m.prefixLen)
+				iout := ipfs.FindPointersAsync(ctx, m.node.Routing.(*routing.IpfsDHT), mh, m.prefixLen)
 				for p := range iout {
 					c <- p
 				}

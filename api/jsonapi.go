@@ -1744,7 +1744,7 @@ func (i *jsonAPIHandler) GETModerators(w http.ResponseWriter, r *http.Request) {
 			}
 			xs = (xs)[:j]
 		}
-		peerInfoList, err := ipfs.FindPointers(i.node.IpfsNode.Routing.(*routing.IpfsDHT), ctx, core.ModeratorPointerID, 64)
+		peerInfoList, err := ipfs.FindPointers(ctx, i.node.IpfsNode.Routing.(*routing.IpfsDHT), core.ModeratorPointerID, 64)
 		if err != nil {
 			ErrorResponse(w, http.StatusInternalServerError, err.Error())
 			return
@@ -1832,7 +1832,7 @@ func (i *jsonAPIHandler) GETModerators(w http.ResponseWriter, r *http.Request) {
 				Id     string `json:"id"`
 				PeerId string `json:"peerId"`
 			}
-			peerChan := ipfs.FindPointersAsync(i.node.IpfsNode.Routing.(*routing.IpfsDHT), ctx, core.ModeratorPointerID, 64)
+			peerChan := ipfs.FindPointersAsync(ctx, i.node.IpfsNode.Routing.(*routing.IpfsDHT), core.ModeratorPointerID, 64)
 
 			found := make(map[string]bool)
 			foundMu := sync.Mutex{}
@@ -3496,7 +3496,8 @@ func (i *jsonAPIHandler) GETPeerInfo(w http.ResponseWriter, r *http.Request) {
 		ErrorResponse(w, http.StatusBadRequest, err.Error())
 		return
 	}
-	ctx, _ := context.WithTimeout(context.Background(), time.Second*30)
+	ctx, cancel := context.WithTimeout(context.Background(), time.Second*30)
+	defer cancel()
 	pi, err := i.node.IpfsNode.Routing.FindPeer(ctx, pid)
 	if err != nil {
 		ErrorResponse(w, http.StatusNotFound, err.Error())

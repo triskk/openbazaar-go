@@ -149,9 +149,9 @@ func UnmarshalString(v string) (string, error) {
 }
 
 func parseInt(s string, err *error) int {
-	v, parseErr := strconv.ParseInt(s, 10, 64)
-	if parseErr != nil {
-		*err = parseErr
+	v, errParse := strconv.ParseInt(s, 10, 64)
+	if errParse != nil {
+		*err = errParse
 	}
 	return int(v)
 }

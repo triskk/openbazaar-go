@@ -12,7 +12,7 @@ import (
 	"strconv"
 )
 
-var addErr = errors.New(`Add directory failed`)
+var errAdd = errors.New(`Add directory failed`)
 
 // Resursively add a directory to IPFS and return the root hash
 func AddDirectory(ctx commands.Context, fpath string) (rootHash string, err error) {
@@ -35,7 +35,7 @@ func AddDirectory(ctx commands.Context, fpath string) (rootHash string, err erro
 		return "", res.Error()
 	}
 	if rootHash == "" {
-		return "", addErr
+		return "", errAdd
 	}
 	return rootHash, nil
 }
@@ -58,7 +58,7 @@ func AddFile(ctx commands.Context, fpath string) (string, error) {
 		return "", res.Error()
 	}
 	if fileHash == "" {
-		return "", addErr
+		return "", errAdd
 	}
 	return fileHash, nil
 }
@@ -81,7 +81,7 @@ func GetHashOfFile(ctx commands.Context, fpath string) (string, error) {
 		return "", res.Error()
 	}
 	if fileHash == "" {
-		return "", addErr
+		return "", errAdd
 	}
 	return fileHash, nil
 }

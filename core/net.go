@@ -92,7 +92,7 @@ func (n *OpenBazaarNode) SendOfflineMessage(p peer.ID, k *libp2p.PubKey, m *pb.M
 	go func() {
 		ctx, cancel := context.WithCancel(context.Background())
 		defer cancel()
-		err := ipfs.PublishPointer(n.IpfsNode, ctx, pointer)
+		err := ipfs.PublishPointer(ctx, n.IpfsNode, pointer)
 		if err != nil {
 			log.Error(err)
 		}
