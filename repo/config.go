@@ -8,11 +8,17 @@ import (
 	"time"
 )
 
-var DefaultBootstrapAddresses = []string{}
+var DefaultBootstrapAddresses = []string{
+	"/ip4/165.227.57.116/tcp/5001/ipfs/QmSNTF29MZiPc8E1oP462AquFwTTjqJwaVgjRRfqow7e8m",
+	"/ip4/104.131.19.44/tcp/5001/ipfs/QmXdT7fz5UuiCSZaekwgWJbK4qkJjagJPvT4WGyigFzrSi",
+}
 
 var TestnetBootstrapAddresses = []string{}
 
-var DataPushNodes = []string{}
+var DataPushNodes = []string{
+  "QmSNTF29MZiPc8E1oP462AquFwTTjqJwaVgjRRfqow7e8m",
+  "QmXdT7fz5UuiCSZaekwgWJbK4qkJjagJPvT4WGyigFzrSi"
+}
 
 type APIConfig struct {
 	Authenticated bool
