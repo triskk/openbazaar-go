@@ -16,8 +16,8 @@ var DefaultBootstrapAddresses = []string{
 var TestnetBootstrapAddresses = []string{}
 
 var DataPushNodes = []string{
-  "QmSNTF29MZiPc8E1oP462AquFwTTjqJwaVgjRRfqow7e8m",
-  "QmXdT7fz5UuiCSZaekwgWJbK4qkJjagJPvT4WGyigFzrSi"
+	"QmSNTF29MZiPc8E1oP462AquFwTTjqJwaVgjRRfqow7e8m",
+	"QmXdT7fz5UuiCSZaekwgWJbK4qkJjagJPvT4WGyigFzrSi",
 }
 
 type APIConfig struct {

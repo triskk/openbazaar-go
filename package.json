@@ -1,7 +1,7 @@
 {
   "name": "openbazaar-go",
   "author": "chris",
-  "version": "0.10.0",
+  "version": "0.10.p",
   "releaseCmd": "git commit -a -m \"gx publish $VERSION\"",
   "language": "english",
   "license": "",
@@ -10,4 +10,3 @@
   },
   "gxVersion": "0.11.0"
 }
-
