@@ -8,6 +8,7 @@ import (
 	"path"
 )
 
+// Migration002 variable is used in one of several repo version migrations
 var Migration002 migration002
 
 type migration002 struct{}

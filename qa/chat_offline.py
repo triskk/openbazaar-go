@@ -18,8 +18,8 @@ class ChatOfflineTest(OpenBazaarTestFramework):
         alice = self.nodes[0]
         bob = self.nodes[1]
 
-        alice_id = alice["peerId"]
-        bob_id = bob["peerId"]
+        alice_id = alice["peerID"]
+        bob_id = bob["peerID"]
 
         # shutdown bob
         api_url = bob["gateway_url"] + "ob/shutdown"
@@ -30,7 +30,7 @@ class ChatOfflineTest(OpenBazaarTestFramework):
         message = {
             "subject": "",
             "message": "You have the stuff??",
-            "peerId": bob_id
+            "peerID": bob_id
         }
         api_url = alice["gateway_url"] + "ob/chat"
         r = requests.post(api_url, data=json.dumps(message, indent=4))
@@ -63,7 +63,7 @@ class ChatOfflineTest(OpenBazaarTestFramework):
         resp = json.loads(r.text)
         if len(resp) != 1:
             raise TestFailure("ChatOfflineTest - FAIL: Did not record outgoing message")
-        if resp[0]["peerId"] != bob_id:
+        if resp[0]["peerID"] != bob_id:
             raise TestFailure("ChatOfflineTest - FAIL: Did not record new conversation")
 
         # startup bob again
@@ -93,7 +93,7 @@ class ChatOfflineTest(OpenBazaarTestFramework):
         resp = json.loads(r.text)
         if len(resp) != 1:
             raise TestFailure("ChatOfflineTest - FAIL: Did not record outgoing message")
-        if resp[0]["peerId"] != alice_id:
+        if resp[0]["peerID"] != alice_id:
             raise TestFailure("ChatOfflineTest - FAIL: Did not record new conversation")
 
         # bob mark as read

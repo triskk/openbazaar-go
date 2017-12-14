@@ -11,14 +11,14 @@ type ModeratedDB struct {
 	lock sync.RWMutex
 }
 
-func (m *ModeratedDB) Put(peerId string) error {
+func (m *ModeratedDB) Put(peerID string) error {
 	m.lock.Lock()
 	defer m.lock.Unlock()
 	tx, _ := m.db.Begin()
 	stmt, _ := tx.Prepare("insert into moderatedstores(peerID) values(?)")
 
 	defer stmt.Close()
-	_, err := stmt.Exec(peerId)
+	_, err := stmt.Exec(peerID)
 	if err != nil {
 		tx.Rollback()
 		return err
@@ -27,12 +27,12 @@ func (m *ModeratedDB) Put(peerId string) error {
 	return nil
 }
 
-func (m *ModeratedDB) Get(offsetId string, limit int) ([]string, error) {
+func (m *ModeratedDB) Get(offsetID string, limit int) ([]string, error) {
 	m.lock.RLock()
 	defer m.lock.RUnlock()
 	var stm string
-	if offsetId != "" {
-		stm = "select peerID from moderatedstores order by rowid desc limit " + strconv.Itoa(limit) + " offset ((select coalesce(max(rowid)+1, 0) from moderatedstores)-(select rowid from moderatedstores where peerID='" + offsetId + "'))"
+	if offsetID != "" {
+		stm = "select peerID from moderatedstores order by rowid desc limit " + strconv.Itoa(limit) + " offset ((select coalesce(max(rowid)+1, 0) from moderatedstores)-(select rowid from moderatedstores where peerID='" + offsetID + "'))"
 	} else {
 		stm = "select peerID from moderatedstores order by rowid desc limit " + strconv.Itoa(limit) + " offset 0"
 	}

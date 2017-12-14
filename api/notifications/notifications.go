@@ -183,28 +183,28 @@ type DisputeAcceptedNotification struct {
 type FollowNotification struct {
 	ID     string `json:"notificationId"`
 	Type   string `json:"type"`
-	PeerID string `json:"peerId"`
+	PeerID string `json:"peerID"`
 }
 
 // UnfollowNotification is sent when a user unfollows you.
 type UnfollowNotification struct {
 	ID     string `json:"notificationId"`
 	Type   string `json:"type"`
-	PeerID string `json:"peerId"`
+	PeerID string `json:"peerID"`
 }
 
 // ModeratorAddNotification is sent when a moderator is added.
 type ModeratorAddNotification struct {
 	ID     string `json:"notificationId"`
 	Type   string `json:"type"`
-	PeerID string `json:"peerId"`
+	PeerID string `json:"peerID"`
 }
 
 // ModeratorRemoveNotification is sent when a moderator is removed.
 type ModeratorRemoveNotification struct {
 	ID     string `json:"notificationId"`
 	Type   string `json:"type"`
-	PeerID string `json:"peerId"`
+	PeerID string `json:"peerID"`
 }
 
 // StatusNotification is sent when the status changes.
@@ -215,7 +215,7 @@ type StatusNotification struct {
 // ChatMessage is sent when you receive a chat message.
 type ChatMessage struct {
 	MessageID string    `json:"messageId"`
-	PeerID    string    `json:"peerId"`
+	PeerID    string    `json:"peerID"`
 	Subject   string    `json:"subject"`
 	Message   string    `json:"message"`
 	Timestamp time.Time `json:"timestamp"`
@@ -224,13 +224,13 @@ type ChatMessage struct {
 // ChatRead is sent when someone reads a chat message.
 type ChatRead struct {
 	MessageID string `json:"messageId"`
-	PeerID    string `json:"peerId"`
+	PeerID    string `json:"peerID"`
 	Subject   string `json:"subject"`
 }
 
 // ChatTyping is sent when someone in a chat starts typing
 type ChatTyping struct {
-	PeerID  string `json:"peerId"`
+	PeerID  string `json:"peerID"`
 	Subject string `json:"subject"`
 }
 

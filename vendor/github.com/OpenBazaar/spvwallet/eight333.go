@@ -1,15 +1,16 @@
 package spvwallet
 
 import (
+	"time"
+
 	"github.com/btcsuite/btcd/chaincfg/chainhash"
 	"github.com/btcsuite/btcd/peer"
 	"github.com/btcsuite/btcd/wire"
-	"time"
 )
 
 var (
-	maxHash              *chainhash.Hash
-	MAX_UNCONFIRMED_TIME time.Duration = time.Hour * 24 * 7
+	maxHash            *chainhash.Hash
+	maxUnconfirmedTime time.Duration = time.Hour * 24 * 7
 )
 
 func init() {
@@ -103,7 +104,7 @@ func (w *SPVWallet) onMerkleBlock(p *peer.Peer, m *wire.MsgMerkleBlock) {
 		}
 		now := time.Now()
 		for i := len(txns) - 1; i >= 0; i-- {
-			if now.After(txns[i].Timestamp.Add(MAX_UNCONFIRMED_TIME)) && txns[i].Height == int32(0) {
+			if now.After(txns[i].Timestamp.Add(maxUnconfirmedTime)) && txns[i].Height == int32(0) {
 				log.Noticef("Marking tx as dead %s", txns[i].Txid)
 				h, err := chainhash.NewHashFromStr(txns[i].Txid)
 				if err != nil {
@@ -238,6 +239,7 @@ func (w *SPVWallet) updateFilterAndSend(p *peer.Peer) {
 	log.Debugf("Sent filter to Peer%d\n", p.ID())
 }
 
+// Rebroadcast function gets all unconfirmed transactions and queues messages with peers for rebroadcast
 func (w *SPVWallet) Rebroadcast() {
 	// get all unconfirmed txs
 	invMsg, err := w.txstore.GetPendingInv()

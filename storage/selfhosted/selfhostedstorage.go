@@ -18,10 +18,10 @@ type SelfHostedStorage struct {
 	repoPath  string
 	context   commands.Context
 	pushNodes []peer.ID
-	store     func(peerId string, ids []cid.Cid) error
+	store     func(peerID string, ids []cid.Cid) error
 }
 
-func NewSelfHostedStorage(repoPath string, context commands.Context, pushNodes []peer.ID, store func(peerId string, ids []cid.Cid) error) *SelfHostedStorage {
+func NewSelfHostedStorage(repoPath string, context commands.Context, pushNodes []peer.ID, store func(peerID string, ids []cid.Cid) error) *SelfHostedStorage {
 	return &SelfHostedStorage{
 		repoPath:  repoPath,
 		context:   context,

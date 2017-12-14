@@ -23,13 +23,13 @@ func TestModeratedDB_Put(t *testing.T) {
 	}
 	stmt, err := modDB.db.Prepare("select peerID from moderatedstores where peerID=?")
 	defer stmt.Close()
-	var peerId string
-	err = stmt.QueryRow("abc").Scan(&peerId)
+	var peerID string
+	err = stmt.QueryRow("abc").Scan(&peerID)
 	if err != nil {
 		t.Error(err)
 	}
-	if peerId != "abc" {
-		t.Errorf(`Expected "abc" got %s`, peerId)
+	if peerID != "abc" {
+		t.Errorf(`Expected "abc" got %s`, peerID)
 	}
 }
 
@@ -49,9 +49,9 @@ func TestModeratedDB_Delete(t *testing.T) {
 	}
 	stmt, _ := modDB.db.Prepare("select peerID from moderatedstores where peerID=?")
 	defer stmt.Close()
-	var peerId string
-	stmt.QueryRow("abc").Scan(&peerId)
-	if peerId != "" {
+	var peerID string
+	stmt.QueryRow("abc").Scan(&peerID)
+	if peerID != "" {
 		t.Error("Failed to delete moderated store")
 	}
 }

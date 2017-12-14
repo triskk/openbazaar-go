@@ -703,7 +703,7 @@ const moderatorUpdatedValidJSON = `{
 // Status
 //
 
-const statusBadPeerIDJSONResponse = `{"status": "error parsing peerId"}`
+const statusBadPeerIDJSONResponse = `{"status": "error parsing peerID"}`
 
 //
 // Wallet

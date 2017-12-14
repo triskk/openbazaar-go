@@ -6,9 +6,10 @@ import (
 	"time"
 )
 
+// ResolveTimeout sets the timeout value for resolving the name of a signed IPNS record
 const ResolveTimeout = 30 * time.Second
 
-// Publish a signed IPNS record to our Peer ID
+// Resolve function publishes a signed IPNS record to our Peer ID
 func Resolve(ctx commands.Context, hash string) (string, error) {
 	args := []string{"name", "resolve", hash}
 	req, cmd, err := NewRequestWithTimeout(ctx, args, ResolveTimeout)
