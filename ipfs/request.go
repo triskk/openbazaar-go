@@ -57,8 +57,7 @@ func NewRequestWithTimeout(ctx cmds.Context, args []string, timeout time.Duratio
 		}
 	}
 	req, cmd, _, err := cli.Parse(args, nil, Root)
-	cctx, cancel := context.WithTimeout(context.Background(), timeout)
-	defer cancel()
+	cctx, _ := context.WithTimeout(context.Background(), timeout)
 	rerr := req.SetRootContext(cctx)
 	if rerr != nil {
 		return nil, nil, rerr
