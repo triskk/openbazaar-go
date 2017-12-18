@@ -10,6 +10,7 @@ var stdoutLogFormat = logging.MustStringFormatter(
 
 var logger logging.Backend
 
+// NodeConfig type definition includes path for data directory, authentication token, Testnet flag, user-agent, and trusted peer for wallet
 type NodeConfig struct {
 
 	// Path for the node's data directory

@@ -13,7 +13,7 @@ type ChatDB struct {
 	lock sync.RWMutex
 }
 
-func (c *ChatDB) Put(messageId string, peerId string, subject string, message string, timestamp time.Time, read bool, outgoing bool) error {
+func (c *ChatDB) Put(messageId string, peerID string, subject string, message string, timestamp time.Time, read bool, outgoing bool) error {
 	c.lock.Lock()
 	defer c.lock.Unlock()
 
@@ -39,7 +39,7 @@ func (c *ChatDB) Put(messageId string, peerId string, subject string, message st
 	defer stmt.Close()
 	_, err = stmt.Exec(
 		messageId,
-		peerId,
+		peerID,
 		subject,
 		message,
 		readInt,
@@ -66,20 +66,20 @@ func (c *ChatDB) GetConversations() []repo.ChatConversation {
 	}
 	var ids []string
 	for rows.Next() {
-		var peerId string
-		if err := rows.Scan(&peerId); err != nil {
+		var peerID string
+		if err := rows.Scan(&peerID); err != nil {
 			continue
 		}
-		ids = append(ids, peerId)
+		ids = append(ids, peerID)
 
 	}
 	defer rows.Close()
-	for _, peerId := range ids {
-		stm := "select Count(*) from chat where peerID='" + peerId + "' and read=0 and subject='' and outgoing=0;"
+	for _, peerID := range ids {
+		stm := "select Count(*) from chat where peerID='" + peerID + "' and read=0 and subject='' and outgoing=0;"
 		row := c.db.QueryRow(stm)
 		var count int
 		row.Scan(&count)
-		stm = "select max(timestamp), message, outgoing from chat where peerID='" + peerId + "' and subject=''"
+		stm = "select max(timestamp), message, outgoing from chat where peerID='" + peerID + "' and subject=''"
 		row = c.db.QueryRow(stm)
 		var m string
 		var ts int
@@ -91,7 +91,7 @@ func (c *ChatDB) GetConversations() []repo.ChatConversation {
 		}
 		timestamp := time.Unix(int64(ts), 0)
 		convo := repo.ChatConversation{
-			PeerId:    peerId,
+			PeerId:    peerID,
 			Unread:    count,
 			Last:      m,
 			Timestamp: timestamp,
@@ -102,7 +102,7 @@ func (c *ChatDB) GetConversations() []repo.ChatConversation {
 	return ret
 }
 
-func (c *ChatDB) GetMessages(peerID string, subject string, offsetId string, limit int) []repo.ChatMessage {
+func (c *ChatDB) GetMessages(peerID string, subject string, offsetID string, limit int) []repo.ChatMessage {
 	c.lock.RLock()
 	defer c.lock.RUnlock()
 	var ret []repo.ChatMessage
@@ -113,8 +113,8 @@ func (c *ChatDB) GetMessages(peerID string, subject string, offsetId string, lim
 	}
 
 	var stm string
-	if offsetId != "" {
-		stm = "select messageID, peerID, message, read, timestamp, outgoing from chat where subject='" + subject + "'" + peerStm + " and timestamp<(select timestamp from chat where messageID='" + offsetId + "') order by timestamp desc limit " + strconv.Itoa(limit) + " ;"
+	if offsetID != "" {
+		stm = "select messageID, peerID, message, read, timestamp, outgoing from chat where subject='" + subject + "'" + peerStm + " and timestamp<(select timestamp from chat where messageID='" + offsetID + "') order by timestamp desc limit " + strconv.Itoa(limit) + " ;"
 	} else {
 		stm = "select messageID, peerID, message, read, timestamp, outgoing from chat where subject='" + subject + "'" + peerStm + " order by timestamp desc limit " + strconv.Itoa(limit) + ";"
 	}
@@ -268,9 +268,9 @@ func (c *ChatDB) DeleteMessage(msgID string) error {
 	return nil
 }
 
-func (c *ChatDB) DeleteConversation(peerId string) error {
+func (c *ChatDB) DeleteConversation(peerID string) error {
 	c.lock.Lock()
 	defer c.lock.Unlock()
-	c.db.Exec("delete from chat where peerId=? and subject=''", peerId)
+	c.db.Exec("delete from chat where peerID=? and subject=''", peerID)
 	return nil
 }

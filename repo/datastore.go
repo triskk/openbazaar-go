@@ -5,13 +5,14 @@ import (
 
 	"time"
 
-	"github.com/phoreproject/wallet-interface"
+	wallet "github.com/OpenBazaar/wallet-interface"
 	btc "github.com/phoreproject/btcutil"
 	notif "github.com/phoreproject/openbazaar-go/api/notifications"
 	"github.com/phoreproject/openbazaar-go/ipfs"
 	"github.com/phoreproject/openbazaar-go/pb"
 )
 
+// Datastore type definition establishes the types of information in the datastore
 type Datastore interface {
 	Config() Config
 	Followers() Followers
@@ -32,6 +33,7 @@ type Datastore interface {
 	Close()
 }
 
+// Config interface defines basic database operations for configuration information
 type Config interface {
 	/* Initialize the database with the node's mnemonic seed and
 	   identity key. This will be called during repo init. */
@@ -50,13 +52,14 @@ type Config interface {
 	IsEncrypted() bool
 }
 
+// Followers interface defines basic database operations for followers of the user
 type Followers interface {
 	// Put a B58 encoded follower ID and proof to the database
 	Put(follower string, proof []byte) error
 
 	/* Get followers from the database.
 	   The offset and limit arguments can be used to for lazy loading. */
-	Get(offsetId string, limit int) ([]Follower, error)
+	Get(offsetID string, limit int) ([]Follower, error)
 
 	// Delete a follower from the database
 	Delete(follower string) error
@@ -65,16 +68,17 @@ type Followers interface {
 	Count() int
 
 	// Are we followed by this peer?
-	FollowsMe(peerId string) bool
+	FollowsMe(peerID string) bool
 }
 
+// Following interface defines basic database operations for peers the user is following
 type Following interface {
 	// Put a B58 encoded peer ID to the database
 	Put(peer string) error
 
 	/* Get a list of following peers from the database.
 	   The offset and limit arguments can be used to for lazy loading. */
-	Get(offsetId string, limit int) ([]string, error)
+	Get(offsetID string, limit int) ([]string, error)
 
 	// Delete a peer from the database
 	Delete(peer string) error
@@ -83,9 +87,10 @@ type Following interface {
 	Count() int
 
 	// Am I following this peer?
-	IsFollowing(peerId string) bool
+	IsFollowing(peerID string) bool
 }
 
+// OfflineMessages interface defines basic database operations for messages
 type OfflineMessages interface {
 	// Put a URL from a retrieved message
 	Put(url string) error
@@ -103,6 +108,7 @@ type OfflineMessages interface {
 	DeleteMessage(url string) error
 }
 
+// Pointers interface defines basic database operations for pointers
 type Pointers interface {
 	// Put a pointer to the database
 	Put(p ipfs.Pointer) error
@@ -123,6 +129,7 @@ type Pointers interface {
 	GetAll() ([]ipfs.Pointer, error)
 }
 
+// Settings interface defines basic database operations for settings information
 type Settings interface {
 	// Put settings to the database, overriding all fields
 	Put(settings SettingsData) error
@@ -137,6 +144,7 @@ type Settings interface {
 	Delete() error
 }
 
+// Inventory interface defines basic database operations for inventory information
 type Inventory interface {
 	/* Put an inventory count for a listing
 	   Override the existing count if it exists */
@@ -158,6 +166,7 @@ type Inventory interface {
 	DeleteAll(slug string) error
 }
 
+// Purchases interface defines basic database operations for purchase information
 type Purchases interface {
 	// Save or update an order
 	Put(orderID string, contract pb.RicardianContract, state pb.OrderState, read bool) error
@@ -187,6 +196,7 @@ type Purchases interface {
 	Count() int
 }
 
+// Sales interface defines basic database operations for order/sale information
 type Sales interface {
 	// Save or update a sale
 	Put(orderID string, contract pb.RicardianContract, state pb.OrderState, read bool) error
@@ -222,6 +232,7 @@ type Sales interface {
 	Count() int
 }
 
+// Cases interface saves/updates/deletes cases, marks them read/unread, counts them and returns metadata and other case details.
 type Cases interface {
 	// Save a new case
 	Put(caseID string, state pb.OrderState, buyerOpened bool, claim string) error
@@ -257,10 +268,11 @@ type Cases interface {
 	Count() int
 }
 
+// Chat interface defines basic database operations for chat information
 type Chat interface {
 
 	// Put a new chat message to the database
-	Put(messageId string, peerId string, subject string, message string, timestamp time.Time, read bool, outgoing bool) error
+	Put(messageId string, peerID string, subject string, message string, timestamp time.Time, read bool, outgoing bool) error
 
 	// Returns a list of open conversations
 	GetConversations() []ChatConversation
@@ -283,6 +295,7 @@ type Chat interface {
 	DeleteConversation(peerID string) error
 }
 
+// Notifications interface defines basic database operations for notification information
 type Notifications interface {
 
 	// Put a new notification to the database
@@ -304,6 +317,7 @@ type Notifications interface {
 	Delete(notifID string) error
 }
 
+// Coupons interface defines basic database operations for coupon information
 type Coupons interface {
 
 	// Put a list of coupons to the db
@@ -316,6 +330,7 @@ type Coupons interface {
 	Delete(slug string) error
 }
 
+// TxMetadata interface defines basic database operations for transaction metadata
 type TxMetadata interface {
 
 	// Put metadata for a transaction to the db
@@ -331,14 +346,15 @@ type TxMetadata interface {
 	Delete(txid string) error
 }
 
+// ModeratedStores interface defines basic database operations for moderated stores
 type ModeratedStores interface {
 	// Put a B58 encoded peer ID to the database
-	Put(peerId string) error
+	Put(peerID string) error
 
 	/* Get the moderated store list from the database.
 	   The offset and limit arguments can be used to for lazy loading. */
-	Get(offsetId string, limit int) ([]string, error)
+	Get(offsetID string, limit int) ([]string, error)
 
 	// Delete a moderated store from the database
-	Delete(peerId string) error
+	Delete(peerID string) error
 }

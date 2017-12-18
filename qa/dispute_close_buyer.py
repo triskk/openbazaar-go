@@ -52,7 +52,7 @@ class DisputeCloseBuyerTest(OpenBazaarTestFramework):
         elif r.status_code != 200:
             resp = json.loads(r.text)
             raise TestFailure("DisputeCloseBuyerTest - FAIL: Moderator POST failed. Reason: %s", resp["reason"])
-        moderatorId = charlie["peerId"]
+        moderatorId = charlie["peerID"]
         time.sleep(4)
 
         # post profile for alice
@@ -76,7 +76,7 @@ class DisputeCloseBuyerTest(OpenBazaarTestFramework):
         time.sleep(4)
 
         # get listing hash
-        api_url = alice["gateway_url"] + "ipns/" + alice["peerId"] + "/listings.json"
+        api_url = alice["gateway_url"] + "ipns/" + alice["peerID"] + "/listings.json"
         r = requests.get(api_url)
         if r.status_code != 200:
             raise TestFailure("DisputeCloseBuyerTest - FAIL: Couldn't get listing index")

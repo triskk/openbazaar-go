@@ -41,7 +41,7 @@ type MessageRetriever struct {
 	ctx          commands.Context
 	service      net.NetworkService
 	prefixLen    int
-	sendAck      func(peerId string, pointerID peer.ID) error
+	sendAck      func(peerID string, pointerID peer.ID) error
 	messageQueue map[pb.Message_MessageType][]offlineMessage
 	httpClient   *http.Client
 	dataPeers    []peer.ID
@@ -54,7 +54,7 @@ type offlineMessage struct {
 	env  pb.Envelope
 }
 
-func NewMessageRetriever(db repo.Datastore, ctx commands.Context, node *core.IpfsNode, bm *net.BanManager, service net.NetworkService, prefixLen int, pushNodes []peer.ID, dialer proxy.Dialer, sendAck func(peerId string, pointerID peer.ID) error) *MessageRetriever {
+func NewMessageRetriever(db repo.Datastore, ctx commands.Context, node *core.IpfsNode, bm *net.BanManager, service net.NetworkService, prefixLen int, pushNodes []peer.ID, dialer proxy.Dialer, sendAck func(peerID string, pointerID peer.ID) error) *MessageRetriever {
 	dial := gonet.Dial
 	if dialer != nil {
 		dial = dialer.Dial

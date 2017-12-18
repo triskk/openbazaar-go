@@ -105,21 +105,21 @@ class OpenBazaarTestFramework(object):
     def start_node(self, node):
         args = [self.binary, "start", "-v", "-d", node["data_dir"], *self.options]
         process = subprocess.Popen(args, stdout=PIPE)
-        peerId = self.wait_for_start_success(process, node)
-        node["peerId"] = peerId
+        peerID = self.wait_for_start_success(process, node)
+        node["peerID"] = peerID
 
     @staticmethod
     def wait_for_start_success(process, node):
-        peerId = ""
+        peerID = ""
         while True:
             if process.poll() is not None:
                 raise Exception("OpenBazaar node failed to start")
             output = process.stdout
             for o in output:
                 if "Peer ID:" in str(o):
-                    peerId = str(o)[str(o).index("Peer ID:") + 10:len(str(o)) - 3]
+                    peerID = str(o)[str(o).index("Peer ID:") + 10:len(str(o)) - 3]
                 if "Gateway/API server listening" in str(o):
-                    return peerId
+                    return peerID
 
     def start_bitcoind(self):
         SelectParams('regtest')

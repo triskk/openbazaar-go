@@ -46,13 +46,13 @@ func (n *OpenBazaarNode) GetProfile() (pb.Profile, error) {
 	return profile, nil
 }
 
-func (n *OpenBazaarNode) FetchProfile(peerId string, useCache bool) (pb.Profile, error) {
+func (n *OpenBazaarNode) FetchProfile(peerID string, useCache bool) (pb.Profile, error) {
 	fetch := func(rootHash string) (pb.Profile, error) {
 		var pro pb.Profile
 		var profile []byte
 		var err error
 		if rootHash == "" {
-			profile, err = ipfs.ResolveThenCat(n.Context, ipnspath.FromString(path.Join(peerId, "profile.json")))
+			profile, err = ipfs.ResolveThenCat(n.Context, ipnspath.FromString(path.Join(peerID, "profile.json")))
 			if err != nil || len(profile) == 0 {
 				return pro, err
 			}
@@ -74,7 +74,7 @@ func (n *OpenBazaarNode) FetchProfile(peerId string, useCache bool) (pb.Profile,
 	var recordAvailable bool
 	var val interface{}
 	if useCache {
-		val, err = n.IpfsNode.Repo.Datastore().Get(ds.NewKey(cachePrefix + peerId))
+		val, err = n.IpfsNode.Repo.Datastore().Get(ds.NewKey(cachePrefix + peerID))
 		if err != nil { // No record in datastore
 			pro, err = fetch("")
 			if err != nil {
@@ -118,7 +118,7 @@ func (n *OpenBazaarNode) FetchProfile(peerId string, useCache bool) (pb.Profile,
 	// Update the record with a new EOL
 	go func() {
 		if !recordAvailable {
-			val, err = n.IpfsNode.Repo.Datastore().Get(ds.NewKey(cachePrefix + peerId))
+			val, err = n.IpfsNode.Repo.Datastore().Get(ds.NewKey(cachePrefix + peerID))
 			if err != nil {
 				return
 			}
@@ -133,7 +133,7 @@ func (n *OpenBazaarNode) FetchProfile(peerId string, useCache bool) (pb.Profile,
 		if err != nil {
 			return
 		}
-		n.IpfsNode.Repo.Datastore().Put(ds.NewKey(cachePrefix+peerId), v)
+		n.IpfsNode.Repo.Datastore().Put(ds.NewKey(cachePrefix+peerID), v)
 	}()
 	return pro, nil
 }

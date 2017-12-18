@@ -28,21 +28,21 @@ func TestChatDB_Put(t *testing.T) {
 	stmt, err := chdb.db.Prepare("select messageID, peerID, subject, message, read, timestamp, outgoing from chat where peerID=?")
 	defer stmt.Close()
 	var msgId string
-	var peerId string
+	var peerID string
 	var subject string
 	var message string
 	var read int
 	var timestamp int
 	var outgoing int
-	err = stmt.QueryRow("abc").Scan(&msgId, &peerId, &subject, &message, &read, &timestamp, &outgoing)
+	err = stmt.QueryRow("abc").Scan(&msgId, &peerID, &subject, &message, &read, &timestamp, &outgoing)
 	if err != nil {
 		t.Error(err)
 	}
 	if msgId != "12345" {
-		t.Errorf(`Expected "abc" got %s`, peerId)
+		t.Errorf(`Expected "abc" got %s`, peerID)
 	}
-	if peerId != "abc" {
-		t.Errorf(`Expected "abc" got %s`, peerId)
+	if peerID != "abc" {
+		t.Errorf(`Expected "abc" got %s`, peerID)
 	}
 	if subject != "" {
 		t.Errorf(`Expected "" got %s`, subject)

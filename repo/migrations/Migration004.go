@@ -8,6 +8,7 @@ import (
 	"os"
 )
 
+// Migration004 variable is used in one of several repo version migrations
 var Migration004 migration004
 
 type migration004 struct{}

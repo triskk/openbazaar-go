@@ -26,12 +26,12 @@ func (f *FollowingDB) Put(follower string) error {
 	return nil
 }
 
-func (f *FollowingDB) Get(offsetId string, limit int) ([]string, error) {
+func (f *FollowingDB) Get(offsetID string, limit int) ([]string, error) {
 	f.lock.RLock()
 	defer f.lock.RUnlock()
 	var stm string
-	if offsetId != "" {
-		stm = "select peerID from following order by rowid desc limit " + strconv.Itoa(limit) + " offset ((select coalesce(max(rowid)+1, 0) from following)-(select rowid from following where peerID='" + offsetId + "'))"
+	if offsetID != "" {
+		stm = "select peerID from following order by rowid desc limit " + strconv.Itoa(limit) + " offset ((select coalesce(max(rowid)+1, 0) from following)-(select rowid from following where peerID='" + offsetID + "'))"
 	} else {
 		stm = "select peerID from following order by rowid desc limit " + strconv.Itoa(limit) + " offset 0"
 	}
@@ -65,13 +65,13 @@ func (f *FollowingDB) Count() int {
 	return count
 }
 
-func (f *FollowingDB) IsFollowing(peerId string) bool {
+func (f *FollowingDB) IsFollowing(peerID string) bool {
 	f.lock.RLock()
 	defer f.lock.RUnlock()
 	stmt, err := f.db.Prepare("select peerID from following where peerID=?")
 	defer stmt.Close()
 	var follower string
-	err = stmt.QueryRow(peerId).Scan(&follower)
+	err = stmt.QueryRow(peerID).Scan(&follower)
 	if err != nil {
 		return false
 	}

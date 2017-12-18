@@ -36,8 +36,7 @@ import (
 
 	bstk "github.com/OpenBazaar/go-blockstackclient"
 	"github.com/OpenBazaar/spvwallet"
-	"github.com/phoreproject/wallet-interface"
-	"github.com/phoreproject/btcd/chaincfg"
+	wallet "github.com/OpenBazaar/wallet-interface"
 	"github.com/ipfs/go-ipfs/commands"
 	ipfscore "github.com/ipfs/go-ipfs/core"
 	bitswap "github.com/ipfs/go-ipfs/exchange/bitswap/network"
@@ -50,6 +49,7 @@ import (
 	lockfile "github.com/ipfs/go-ipfs/repo/fsrepo/lock"
 	"github.com/ipfs/go-ipfs/thirdparty/ds-help"
 	"github.com/op/go-logging"
+	"github.com/phoreproject/btcd/chaincfg"
 	"github.com/phoreproject/openbazaar-go/bitcoin"
 	"github.com/phoreproject/openbazaar-go/bitcoin/exchange"
 	"github.com/phoreproject/openbazaar-go/core"
@@ -59,6 +59,7 @@ import (
 	"github.com/phoreproject/openbazaar-go/storage/selfhosted"
 )
 
+// Node structure definition for IPFS OpenBazaar node including configurations for node, IPFS, and API.
 type Node struct {
 	node       *core.OpenBazaarNode
 	config     NodeConfig
@@ -67,6 +68,7 @@ type Node struct {
 	apiConfig  *repo.APIConfig
 }
 
+// NewNode function creates a new OpenBazaar node and initializes its configuration
 func NewNode(config NodeConfig) (*Node, error) {
 
 	repoLockFile := filepath.Join(config.RepoPath, lockfile.LockFile)
@@ -185,7 +187,7 @@ func NewNode(config NodeConfig) (*Node, error) {
 			return nil, err
 		}
 	}
-	feeApi, err := url.Parse(walletCfg.FeeAPI)
+	feeAPI, err := url.Parse(walletCfg.FeeAPI)
 	if err != nil {
 		return nil, err
 	}
@@ -196,7 +198,7 @@ func NewNode(config NodeConfig) (*Node, error) {
 		LowFee:       uint64(walletCfg.LowFeeDefault),
 		MediumFee:    uint64(walletCfg.MediumFeeDefault),
 		HighFee:      uint64(walletCfg.HighFeeDefault),
-		FeeAPI:       *feeApi,
+		FeeAPI:       *feeAPI,
 		RepoPath:     config.RepoPath,
 		CreationDate: creationDate,
 		DB:           sqliteDB,
@@ -289,6 +291,7 @@ func (n *Node) startIPFSNode(repoPath string, config *ipfscore.BuildCfg) (*ipfsc
 	return nd, ctx, nil
 }
 
+// Start function starts the OpenBazaar node and node services
 func (n *Node) Start() error {
 	nd, ctx, err := n.startIPFSNode(n.config.RepoPath, n.ipfsConfig)
 	if err != nil {
@@ -367,6 +370,7 @@ func (n *Node) Start() error {
 	return nil
 }
 
+// Stop function closes the OpenBazaar node datastore, repository lock, wallet, and IPFS node
 func (n *Node) Stop() error {
 	core.OfflineMessageWaitGroup.Wait()
 	core.Node.Datastore.Close()
@@ -431,6 +435,7 @@ func newHTTPGateway(node *core.OpenBazaarNode, authCookie http.Cookie, config re
 	return api.NewGateway(node, authCookie, gwLis.NetListener(), config, logger, opts...)
 }
 
+// DHTClientOption stores the OpenBazaar node DHT routing option
 var DHTClientOption ipfscore.RoutingOption = constructClientDHTRouting
 
 func constructClientDHTRouting(ctx context.Context, host p2phost.Host, dstore ipfsrepo.Datastore) (routing.IpfsRouting, error) {

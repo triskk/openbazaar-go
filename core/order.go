@@ -193,7 +193,7 @@ func (n *OpenBazaarNode) Purchase(data *PurchaseData) (orderId string, paymentAd
 		if err != nil { // Vendor offline
 			// Send using offline messaging
 			log.Warningf("Vendor %s is offline, sending offline order message", contract.VendorListings[0].VendorID.PeerID)
-			peerId, err := peer.IDB58Decode(contract.VendorListings[0].VendorID.PeerID)
+			peerID, err := peer.IDB58Decode(contract.VendorListings[0].VendorID.PeerID)
 			if err != nil {
 				return "", "", 0, false, err
 			}
@@ -209,7 +209,7 @@ func (n *OpenBazaarNode) Purchase(data *PurchaseData) (orderId string, paymentAd
 			if err != nil {
 				return "", "", 0, false, err
 			}
-			err = n.SendOfflineMessage(peerId, &k, &m)
+			err = n.SendOfflineMessage(peerID, &k, &m)
 			if err != nil {
 				return "", "", 0, false, err
 			}
@@ -335,7 +335,7 @@ func (n *OpenBazaarNode) Purchase(data *PurchaseData) (orderId string, paymentAd
 
 			// Send using offline messaging
 			log.Warningf("Vendor %s is offline, sending offline order message", contract.VendorListings[0].VendorID.PeerID)
-			peerId, err := peer.IDB58Decode(contract.VendorListings[0].VendorID.PeerID)
+			peerID, err := peer.IDB58Decode(contract.VendorListings[0].VendorID.PeerID)
 			if err != nil {
 				return "", "", 0, false, err
 			}
@@ -351,7 +351,7 @@ func (n *OpenBazaarNode) Purchase(data *PurchaseData) (orderId string, paymentAd
 			if err != nil {
 				return "", "", 0, false, err
 			}
-			err = n.SendOfflineMessage(peerId, &k, &m)
+			err = n.SendOfflineMessage(peerID, &k, &m)
 			if err != nil {
 				return "", "", 0, false, err
 			}

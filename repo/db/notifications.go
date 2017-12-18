@@ -31,7 +31,7 @@ func (n *NotficationsDB) Put(notifID string, notification notif.Data, notifType 
 	return nil
 }
 
-func (n *NotficationsDB) GetAll(offsetId string, limit int, typeFilter []string) ([]notif.Notification, int, error) {
+func (n *NotficationsDB) GetAll(offsetID string, limit int, typeFilter []string) ([]notif.Notification, int, error) {
 	var ret []notif.Notification
 
 	n.lock.RLock()
@@ -55,8 +55,8 @@ func (n *NotficationsDB) GetAll(offsetId string, limit int, typeFilter []string)
 	}
 
 	var args []interface{}
-	if offsetId != "" {
-		args = append(args, offsetId)
+	if offsetID != "" {
+		args = append(args, offsetID)
 		if len(types) > 0 {
 			filter = " and " + typeFilterClause
 			for _, a := range types {

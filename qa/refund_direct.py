@@ -63,7 +63,7 @@ class RefundDirectTest(OpenBazaarTestFramework):
         time.sleep(4)
 
         # get listing hash
-        api_url = alice["gateway_url"] + "ipns/" + alice["peerId"] + "/listings.json"
+        api_url = alice["gateway_url"] + "ipns/" + alice["peerID"] + "/listings.json"
         r = requests.get(api_url)
         if r.status_code != 200:
             raise TestFailure("RefundDirectTest - FAIL: Couldn't get listing index")

@@ -42,7 +42,7 @@ type SMTPSettings struct {
 }
 
 type Follower struct {
-	PeerId string `json:"peerId"`
+	PeerId string `json:"peerID"`
 	Proof  []byte `json:"proof"`
 }
 
@@ -54,7 +54,7 @@ type Coupon struct {
 
 type ChatMessage struct {
 	MessageId string    `json:"messageId"`
-	PeerId    string    `json:"peerId"`
+	PeerId    string    `json:"peerID"`
 	Subject   string    `json:"subject"`
 	Message   string    `json:"message"`
 	Read      bool      `json:"read"`
@@ -63,13 +63,13 @@ type ChatMessage struct {
 }
 
 type GroupChatMessage struct {
-	PeerIds []string `json:"peerIds"`
+	PeerIds []string `json:"peerIDs"`
 	Subject string   `json:"subject"`
 	Message string   `json:"message"`
 }
 
 type ChatConversation struct {
-	PeerId    string    `json:"peerId"`
+	PeerId    string    `json:"peerID"`
 	Unread    int       `json:"unread"`
 	Last      string    `json:"lastMessage"`
 	Timestamp time.Time `json:"timestamp"`

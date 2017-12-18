@@ -147,15 +147,15 @@ func getImageAttributes(targetWidth, targetHeight, imgWidth, imgHeight uint) (wi
 	return uint(w), uint(h)
 }
 
-func (n *OpenBazaarNode) FetchAvatar(peerId string, size string, useCache bool) (io.DagReader, error) {
-	return n.FetchImage(peerId, "avatar", size, useCache)
+func (n *OpenBazaarNode) FetchAvatar(peerID string, size string, useCache bool) (io.DagReader, error) {
+	return n.FetchImage(peerID, "avatar", size, useCache)
 }
 
-func (n *OpenBazaarNode) FetchHeader(peerId string, size string, useCache bool) (io.DagReader, error) {
-	return n.FetchImage(peerId, "header", size, useCache)
+func (n *OpenBazaarNode) FetchHeader(peerID string, size string, useCache bool) (io.DagReader, error) {
+	return n.FetchImage(peerID, "header", size, useCache)
 }
 
-func (n *OpenBazaarNode) FetchImage(peerId string, imageType string, size string, useCache bool) (io.DagReader, error) {
+func (n *OpenBazaarNode) FetchImage(peerID string, imageType string, size string, useCache bool) (io.DagReader, error) {
 	fetch := func(rootHash string) (io.DagReader, error) {
 		var dr io.DagReader
 		var err error
@@ -163,7 +163,7 @@ func (n *OpenBazaarNode) FetchImage(peerId string, imageType string, size string
 		ctx, cancel := context.WithTimeout(context.Background(), time.Minute*2)
 		defer cancel()
 		if rootHash == "" {
-			query := "/ipns/" + peerId + "/images/" + size + "/" + imageType
+			query := "/ipns/" + peerID + "/images/" + size + "/" + imageType
 			dr, err = coreunix.Cat(ctx, n.IpfsNode, query)
 			if err != nil {
 				return dr, err
@@ -183,7 +183,7 @@ func (n *OpenBazaarNode) FetchImage(peerId string, imageType string, size string
 	var recordAvailable bool
 	var val interface{}
 	if useCache {
-		val, err = n.IpfsNode.Repo.Datastore().Get(ds.NewKey(cachePrefix + peerId))
+		val, err = n.IpfsNode.Repo.Datastore().Get(ds.NewKey(cachePrefix + peerID))
 		if err != nil { // No record in datastore
 			dr, err = fetch("")
 			if err != nil {
@@ -223,7 +223,7 @@ func (n *OpenBazaarNode) FetchImage(peerId string, imageType string, size string
 	// Update the record with a new EOL
 	go func() {
 		if !recordAvailable {
-			val, err = n.IpfsNode.Repo.Datastore().Get(ds.NewKey(cachePrefix + peerId))
+			val, err = n.IpfsNode.Repo.Datastore().Get(ds.NewKey(cachePrefix + peerID))
 			if err != nil {
 				return
 			}
@@ -238,7 +238,7 @@ func (n *OpenBazaarNode) FetchImage(peerId string, imageType string, size string
 		if err != nil {
 			return
 		}
-		n.IpfsNode.Repo.Datastore().Put(ds.NewKey(cachePrefix+peerId), v)
+		n.IpfsNode.Repo.Datastore().Put(ds.NewKey(cachePrefix+peerID), v)
 	}()
 	return dr, nil
 }
