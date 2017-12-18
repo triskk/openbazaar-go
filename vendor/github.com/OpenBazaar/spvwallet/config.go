@@ -1,21 +1,19 @@
 package spvwallet
 
 import (
+	"github.com/OpenBazaar/wallet-interface"
+	"github.com/btcsuite/btcd/chaincfg"
+	"github.com/mitchellh/go-homedir"
+	"github.com/op/go-logging"
+	"golang.org/x/net/proxy"
 	"net"
 	"net/url"
 	"os"
 	"path/filepath"
 	"runtime"
 	"time"
-
-	"github.com/OpenBazaar/wallet-interface"
-	"github.com/btcsuite/btcd/chaincfg"
-	"github.com/mitchellh/go-homedir"
-	"github.com/op/go-logging"
-	"golang.org/x/net/proxy"
 )
 
-// Config type definition for spvwallet
 type Config struct {
 	// Network parameters. Set mainnet, testnet, or regtest using this.
 	Params *chaincfg.Params
@@ -60,14 +58,13 @@ type Config struct {
 	Logger logging.Backend
 }
 
-// NewDefaultConfig function creates new configuration for spvwallet
 func NewDefaultConfig() *Config {
 	repoPath, _ := getRepoPath()
 	_, ferr := os.Stat(repoPath)
 	if os.IsNotExist(ferr) {
 		os.Mkdir(repoPath, os.ModePerm)
 	}
-	feeAPI, _ := url.Parse("https://bitcoinfees.21.co/api/v1/fees/recommended")
+	feeApi, _ := url.Parse("https://bitcoinfees.21.co/api/v1/fees/recommended")
 	return &Config{
 		Params:    &chaincfg.MainNetParams,
 		UserAgent: "spvwallet",
@@ -76,7 +73,7 @@ func NewDefaultConfig() *Config {
 		MediumFee: 160,
 		HighFee:   180,
 		MaxFee:    2000,
-		FeeAPI:    *feeAPI,
+		FeeAPI:    *feeApi,
 		Logger:    logging.NewLogBackend(os.Stdout, "", 0),
 	}
 }

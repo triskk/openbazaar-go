@@ -95,9 +95,9 @@ func ParseMultiaddr(m ma.Multiaddr) (a IPFSAddr, err error) {
 	}
 
 	// make sure 'ipfs id' parses as a peer.ID
-	peerIDParts := path.SplitList(ipfspart.String())
-	peerIDStr := peerIDParts[len(peerIDParts)-1]
-	id, err := peer.IDB58Decode(peerIDStr)
+	peerIdParts := path.SplitList(ipfspart.String())
+	peerIdStr := peerIdParts[len(peerIdParts)-1]
+	id, err := peer.IDB58Decode(peerIdStr)
 	if err != nil {
 		return nil, err
 	}

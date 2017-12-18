@@ -1830,7 +1830,7 @@ func (i *jsonAPIHandler) GETModerators(w http.ResponseWriter, r *http.Request) {
 		go func() {
 			type wsResp struct {
 				Id     string `json:"id"`
-				PeerId string `json:"peerID"`
+				PeerId string `json:"peerId"`
 			}
 			peerChan := ipfs.FindPointersAsync(ctx, i.node.IpfsNode.Routing.(*routing.IpfsDHT), core.ModeratorPointerID, 64)
 
@@ -2609,7 +2609,7 @@ func (i *jsonAPIHandler) POSTFetchProfiles(w http.ResponseWriter, r *http.Reques
 		go func() {
 			type profileError struct {
 				ID     string `json:"id"`
-				PeerId string `json:"peerID"`
+				PeerId string `json:"peerId"`
 				Error  string `json:"error"`
 			}
 			for _, p := range pids {
@@ -2663,7 +2663,7 @@ func (i *jsonAPIHandler) GETTransactions(w http.ResponseWriter, r *http.Request)
 		ErrorResponse(w, http.StatusInternalServerError, err.Error())
 		return
 	}
-	offsetID := r.URL.Query().Get("offsetID")
+	offsetID := r.URL.Query().Get("offsetId")
 	type Tx struct {
 		Txid          string    `json:"txid"`
 		Value         int64     `json:"value"`

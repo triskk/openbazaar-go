@@ -5,14 +5,13 @@ import (
 
 	"time"
 
-	wallet "github.com/OpenBazaar/wallet-interface"
+	"github.com/phoreproject/wallet-interface"
 	btc "github.com/phoreproject/btcutil"
 	notif "github.com/phoreproject/openbazaar-go/api/notifications"
 	"github.com/phoreproject/openbazaar-go/ipfs"
 	"github.com/phoreproject/openbazaar-go/pb"
 )
 
-// Datastore type definition establishes the types of information in the datastore
 type Datastore interface {
 	Config() Config
 	Followers() Followers

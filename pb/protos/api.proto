@@ -51,13 +51,13 @@ message TransactionRecord {
 }
 
 message PeerAndProfile {
-    string peerID   = 1;
+    string peerId   = 1;
     Profile profile = 2;
 }
 
 message PeerAndProfileWithID {
     string id       = 1;
-    string peerID   = 2;
+    string peerId   = 2;
     Profile profile = 3;
 }
 

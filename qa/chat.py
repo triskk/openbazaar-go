@@ -18,14 +18,14 @@ class ChatTest(OpenBazaarTestFramework):
         alice = self.nodes[0]
         bob = self.nodes[1]
 
-        alice_id = alice["peerID"]
-        bob_id = bob["peerID"]
+        alice_id = alice["peerId"]
+        bob_id = bob["peerId"]
 
         # alice send message
         message = {
             "subject": "",
             "message": "You have the stuff??",
-            "peerID": bob_id
+            "peerId": bob_id
         }
         api_url = alice["gateway_url"] + "ob/chat"
         r = requests.post(api_url, data=json.dumps(message, indent=4))
@@ -58,7 +58,7 @@ class ChatTest(OpenBazaarTestFramework):
         resp = json.loads(r.text)
         if len(resp) != 1:
             raise TestFailure("ChatTest - FAIL: Did not record outgoing message")
-        if resp[0]["peerID"] != bob_id:
+        if resp[0]["peerId"] != bob_id:
             raise TestFailure("ChatTest - FAIL: Did not record new conversation")
 
         # check bob saved message correctly
@@ -84,7 +84,7 @@ class ChatTest(OpenBazaarTestFramework):
         resp = json.loads(r.text)
         if len(resp) != 1:
             raise TestFailure("ChatTest - FAIL: Did not record outgoing message")
-        if resp[0]["peerID"] != alice_id:
+        if resp[0]["peerId"] != alice_id:
             raise TestFailure("ChatTest - FAIL: Did not record new conversation")
 
         # bob mark as read

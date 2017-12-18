@@ -38,9 +38,9 @@ func InfoFromP2pAddr(m ma.Multiaddr) (*PeerInfo, error) {
 	}
 
 	// make sure the /ipfs value parses as a peer.ID
-	peerIDParts := strings.Split(ipfspart.String(), "/")
-	peerIDStr := peerIDParts[len(peerIDParts)-1]
-	id, err := peer.IDB58Decode(peerIDStr)
+	peerIdParts := strings.Split(ipfspart.String(), "/")
+	peerIdStr := peerIdParts[len(peerIdParts)-1]
+	id, err := peer.IDB58Decode(peerIdStr)
 	if err != nil {
 		return nil, err
 	}

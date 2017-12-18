@@ -303,7 +303,7 @@ func (m *TransactionRecord) GetTimestamp() *google_protobuf.Timestamp {
 }
 
 type PeerAndProfile struct {
-	PeerId  string   `protobuf:"bytes,1,opt,name=peerID" json:"peerID,omitempty"`
+	PeerId  string   `protobuf:"bytes,1,opt,name=peerId" json:"peerId,omitempty"`
 	Profile *Profile `protobuf:"bytes,2,opt,name=profile" json:"profile,omitempty"`
 }
 
@@ -328,7 +328,7 @@ func (m *PeerAndProfile) GetProfile() *Profile {
 
 type PeerAndProfileWithID struct {
 	Id      string   `protobuf:"bytes,1,opt,name=id" json:"id,omitempty"`
-	PeerId  string   `protobuf:"bytes,2,opt,name=peerID" json:"peerID,omitempty"`
+	PeerId  string   `protobuf:"bytes,2,opt,name=peerId" json:"peerId,omitempty"`
 	Profile *Profile `protobuf:"bytes,3,opt,name=profile" json:"profile,omitempty"`
 }
 

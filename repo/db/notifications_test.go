@@ -40,7 +40,7 @@ func TestNotficationsDB_Put(t *testing.T) {
 	if notifType != "follow" {
 		t.Error("Returned incorrect type")
 	}
-	if string(data) != `{"notificationId":"1","type":"follow","peerID":"abc"}` {
+	if string(data) != `{"notificationId":"1","type":"follow","peerId":"abc"}` {
 		t.Error("Returned incorrect notification")
 	}
 	if read != 0 {

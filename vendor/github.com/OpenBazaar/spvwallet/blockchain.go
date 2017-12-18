@@ -2,15 +2,14 @@ package spvwallet
 
 import (
 	"fmt"
-	"math/big"
-	"sort"
-	"sync"
-	"time"
-
 	"github.com/btcsuite/btcd/blockchain"
 	"github.com/btcsuite/btcd/chaincfg"
 	"github.com/btcsuite/btcd/chaincfg/chainhash"
 	"github.com/btcsuite/btcd/wire"
+	"math/big"
+	"sort"
+	"sync"
+	"time"
 )
 
 // Blockchain settings.  These are kindof Bitcoin specific, but not contained in
@@ -26,7 +25,6 @@ const (
 	medianTimeBlocks    = 11
 )
 
-// ChainState type definition to be used in Blockchain type
 type ChainState int
 
 const (
@@ -34,7 +32,7 @@ const (
 	WAITING = 1
 )
 
-// Blockchain type implements wrapper around Headers implementation that handles all blockchain operations
+// Wrapper around Headers implementation that handles all blockchain operations
 type Blockchain struct {
 	lock        *sync.Mutex
 	params      *chaincfg.Params
