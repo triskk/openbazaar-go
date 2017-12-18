@@ -3495,8 +3495,7 @@ func (i *jsonAPIHandler) GETPeerInfo(w http.ResponseWriter, r *http.Request) {
 		ErrorResponse(w, http.StatusBadRequest, err.Error())
 		return
 	}
-	ctx, cancel := context.WithTimeout(context.Background(), time.Second*30)
-	defer cancel()
+	ctx, _ := context.WithTimeout(context.Background(), time.Second*30)
 	pi, err := i.node.IpfsNode.Routing.FindPeer(ctx, pid)
 	if err != nil {
 		ErrorResponse(w, http.StatusNotFound, err.Error())
