@@ -26,7 +26,7 @@ type cachedName struct {
 	expiration time.Time
 }
 
-// NewNameSystem function that is used to resolve IPFS naming based on routing
+// NewNameSystem type defniition that is used to resolve IPFS naming based on routing
 func NewNameSystem(resolvers []Resolver) (*NameSystem, error) {
 	n := &NameSystem{
 		resolvers: make(map[string]Resolver),
@@ -40,7 +40,7 @@ func NewNameSystem(resolvers []Resolver) (*NameSystem, error) {
 	return n, nil
 }
 
-// Resolve function identifies system
+// Resolve type definition identifies system
 func (n *NameSystem) Resolve(ctx context.Context, name string) (pid peer.ID, err error) {
 	pid, err = peer.IDB58Decode(name)
 	if err == nil {
