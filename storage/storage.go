@@ -5,6 +5,7 @@ import (
 	peer "gx/ipfs/QmXYjuNuxVzXKJCfWasQk1RqkhVLDM9jtUKhqc2WPQmFSB/go-libp2p-peer"
 )
 
+// OfflineMessagingStorage is an interface that allows for the storage of messages sent to offline recipients.
 type OfflineMessagingStorage interface {
 	/* This interface provides a pluggable mechanism for implementing a variety
 	   of offline message storage solutions. When the app wants to send a message

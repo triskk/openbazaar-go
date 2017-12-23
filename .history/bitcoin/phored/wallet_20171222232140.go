@@ -36,7 +36,7 @@ const (
 	Account = "OpenBazaar"
 )
 
-// BitcoindWallet type definition represents a wallet based on JSON-RPC and Bitcoind
+// BitcoindWallet represents a wallet based on JSON-RPC and Bitcoind
 type BitcoindWallet struct {
 	params           *chaincfg.Params
 	repoPath         string
@@ -60,7 +60,7 @@ var connCfg = &rpcclient.ConnConfig{
 	DisableConnectOnNew:  false,
 }
 
-// NewBitcoindWallet function initializes a bitcoin wallet
+// NewBitcoindWallet type definition initializes a bitcoin wallet
 func NewBitcoindWallet(mnemonic string, params *chaincfg.Params, repoPath string, trustedPeer string, binary string, username string, password string, useTor bool, torControlPort int) *BitcoindWallet {
 	seed := b39.NewSeed(mnemonic, "")
 	mPrivKey, _ := hd.NewMaster(seed, params)
@@ -86,7 +86,7 @@ func NewBitcoindWallet(mnemonic string, params *chaincfg.Params, repoPath string
 	return &w
 }
 
-// BuildArguments function takes user input to change parameters of NewBitcoindWallet
+// BuildAruments type definition type definition takes user input to change parameters of NewBitcoindWallet
 func (w *BitcoindWallet) BuildArguments(rescan bool) []string {
 	notify := `curl -d %s http://localhost:8330/`
 	args := []string{"-walletnotify=" + notify, "-server"}
@@ -105,7 +105,7 @@ func (w *BitcoindWallet) BuildArguments(rescan bool) []string {
 	return args
 }
 
-// Start function connects BitcoindWallet to phore
+// Start type definition connects BitcoindWallet to phore
 func (w *BitcoindWallet) Start() {
 	w.shutdownIfActive()
 	args := w.BuildArguments(false)
@@ -151,44 +151,44 @@ func (w *BitcoindWallet) shutdownIfActive() {
 	time.Sleep(5 * time.Second)
 }
 
-// CurrencyCode function that returns a code linked to a currency
+// CurrencyCode type definition that returns a code linked to a currency
 func (w *BitcoindWallet) CurrencyCode() string {
 	return "phr"
 }
 
-// IsDust function checks whether the amount of bitcoin would be considered dust
+// IsDust type definition checks whether the amount of bitcoin would be considered dust
 func (w *BitcoindWallet) IsDust(amount int64) bool {
 	return txrules.IsDustAmount(btc.Amount(amount), 25, txrules.DefaultRelayFeePerKb)
 }
 
-// MasterPrivateKey function is the private key to the phore wallet
+// MasterPrivateKey type definition is the private key to the phore wallet
 func (w *BitcoindWallet) MasterPrivateKey() *hd.ExtendedKey {
 	return w.masterPrivateKey
 }
 
-// MasterPublicKey function is the public key to the phore wallet
+// MasterPublicKey type definition is the public key to the phore wallet
 func (w *BitcoindWallet) MasterPublicKey() *hd.ExtendedKey {
 	return w.masterPublicKey
 }
 
-// CurrentAddress function is the phore wallet address
+// CurrentAddress type definition is the phore wallet address
 func (w *BitcoindWallet) CurrentAddress(purpose wallet.KeyPurpose) btc.Address {
 	addr, _ := w.rpcClient.GetAccountAddress(Account)
 	return addr
 }
 
-// NewAddress function is a way to get a new address to make a network connection
+// GetNewAddress type definition is a way to get an address to make a network connection to
 func (w *BitcoindWallet) NewAddress(purpose wallet.KeyPurpose) btc.Address {
 	addr, _ := w.rpcClient.GetNewAddress(Account)
 	return addr
 }
 
-// DecodeAddress function returns a fresh address that has never been returned by this function
+// DecodeAddress type definition decodes the address linked to a bitcoin wallet
 func (w *BitcoindWallet) DecodeAddress(addr string) (btc.Address, error) {
 	return btc.DecodeAddress(addr, w.params)
 }
 
-// ScriptToAddress function turns the script output into an address
+// ScriptToAddress type definition turns the script output into an address
 func (w *BitcoindWallet) ScriptToAddress(script []byte) (btc.Address, error) {
 	_, addrs, _, err := txscript.ExtractPkScriptAddrs(script, w.params)
 	if err != nil {
@@ -200,12 +200,12 @@ func (w *BitcoindWallet) ScriptToAddress(script []byte) (btc.Address, error) {
 	return addrs[0], nil
 }
 
-// AddressToScript function turns the given address into an output script
+// AddressToScript type definition turns the given address into an output script
 func (w *BitcoindWallet) AddressToScript(addr btc.Address) ([]byte, error) {
 	return txscript.PayToAddrScript(addr)
 }
 
-// HasKey function returns if the wallet has the key to the given address
+// HasKey type definition returns if the wallet has the key to the given address
 func (w *BitcoindWallet) HasKey(addr btc.Address) bool {
 	_, err := w.rpcClient.DumpPrivKey(addr)
 	if err != nil {
@@ -214,7 +214,7 @@ func (w *BitcoindWallet) HasKey(addr btc.Address) bool {
 	return true
 }
 
-// Balance function gets the confirmed and unconfirmed balances
+// Balance type definition gets the confirmed and unconfirmed balances
 func (w *BitcoindWallet) Balance() (confirmed, unconfirmed int64) {
 	resp, _ := w.rpcClient.RawRequest("getwalletinfo", []json.RawMessage{})
 	type walletInfo struct {
@@ -229,7 +229,7 @@ func (w *BitcoindWallet) Balance() (confirmed, unconfirmed int64) {
 	return int64(c.ToUnit(btc.AmountSatoshi)), int64(u.ToUnit(btc.AmountSatoshi))
 }
 
-// GetBlockHeight function returns the current block height
+// GetBlockHeight type definition returns the current block height
 func (w *BitcoindWallet) GetBlockHeight(hash *chainhash.Hash) (int32, error) {
 	blockinfo, err := w.rpcClient.GetBlockHeaderVerbose(hash)
 	if err != nil {
@@ -238,7 +238,7 @@ func (w *BitcoindWallet) GetBlockHeight(hash *chainhash.Hash) (int32, error) {
 	return blockinfo.Height, nil
 }
 
-// Transactions function returns the transactions of a wallet
+// Transactions type definition returns the transactions of a wallet
 func (w *BitcoindWallet) Transactions() ([]wallet.Txn, error) {
 	var ret []wallet.Txn
 	resp, err := w.rpcClient.ListTransactions(Account)
@@ -273,7 +273,7 @@ func (w *BitcoindWallet) Transactions() ([]wallet.Txn, error) {
 	return ret, nil
 }
 
-// GetTransaction function returns a specific transaction at a given hash
+// GetTransaction type definition returns a specific transaction at a given hash
 func (w *BitcoindWallet) GetTransaction(txid chainhash.Hash) (wallet.Txn, error) {
 	includeWatchOnly := false
 	t := wallet.Txn{}
@@ -289,7 +289,7 @@ func (w *BitcoindWallet) GetTransaction(txid chainhash.Hash) (wallet.Txn, error)
 	return t, nil
 }
 
-// GetConfirmations function returns the number of confirmations and the height
+// GetConfirmations type definition returns the number of confirmations and the height
 func (w *BitcoindWallet) GetConfirmations(txid chainhash.Hash) (uint32, uint32, error) {
 	includeWatchOnly := true
 	resp, err := w.rpcClient.GetTransaction(&txid, &includeWatchOnly)
@@ -299,7 +299,7 @@ func (w *BitcoindWallet) GetConfirmations(txid chainhash.Hash) (uint32, uint32, 
 	return uint32(resp.Confirmations), uint32(resp.BlockIndex), nil
 }
 
-// ChainTip function returns the height of the blockchain
+// ChainTip type definition returns the height of the blockchain
 func (w *BitcoindWallet) ChainTip() (uint32, chainhash.Hash) {
 	var ch chainhash.Hash
 	info, err := w.rpcClient.GetInfo()
@@ -354,7 +354,7 @@ func (w *BitcoindWallet) gatherCoins() (map[coinset.Coin]*hd.ExtendedKey, error)
 	return m, nil
 }
 
-// Spend function sends a given amount of coin to a target address
+// Spend type definition sends a given amount of coin to a target address
 func (w *BitcoindWallet) Spend(amount int64, addr btc.Address, feeLevel wallet.FeeLevel) (*chainhash.Hash, error) {
 	tx, err := w.buildTx(amount, addr, feeLevel)
 	if err != nil {
@@ -459,7 +459,7 @@ func (w *BitcoindWallet) buildTx(amount int64, addr btc.Address, feeLevel wallet
 	return authoredTx.Tx, nil
 }
 
-// BumpFee function will bump the fee of a transaction
+// BumpFee type definition will bump the fee of a transaction
 func (w *BitcoindWallet) BumpFee(txid chainhash.Hash) (*chainhash.Hash, error) {
 	includeWatchOnly := false
 	tx, err := w.rpcClient.GetTransaction(&txid, &includeWatchOnly)
@@ -512,7 +512,7 @@ func (w *BitcoindWallet) BumpFee(txid chainhash.Hash) (*chainhash.Hash, error) {
 	return nil, spvwallet.BumpFeeNotFoundError
 }
 
-// GetFeePerByte function determines the fee per byte
+// GetFeePerByte type definition determines the fee per byte
 func (w *BitcoindWallet) GetFeePerByte(feeLevel wallet.FeeLevel) uint64 {
 	defautlFee := uint64(50)
 	var nBlocks json.RawMessage
@@ -541,7 +541,7 @@ func (w *BitcoindWallet) GetFeePerByte(feeLevel wallet.FeeLevel) uint64 {
 	return uint64(fee)
 }
 
-// EstimateFee function estimates the fee of a transaction
+// EstimateFee type definition estimates the fee of a transaction
 func (w *BitcoindWallet) EstimateFee(ins []wallet.TransactionInput, outs []wallet.TransactionOutput, feePerByte uint64) uint64 {
 	tx := wire.NewMsgTx(wire.TxVersion)
 	for _, out := range outs {
@@ -553,7 +553,7 @@ func (w *BitcoindWallet) EstimateFee(ins []wallet.TransactionInput, outs []walle
 	return uint64(fee)
 }
 
-// EstimateSpendFee function estimates the fee of spending
+// EstimateSpendFee estimates the fee of spending
 func (w *BitcoindWallet) EstimateSpendFee(amount int64, feeLevel wallet.FeeLevel) (uint64, error) {
 	// Since this is an estimate we can use a dummy output address. Let's use a long one so we don't under estimate.
 	addr, err := btc.DecodeAddress("bc1qxtq7ha2l5qg70atpwp3fus84fx3w0v2w4r2my7gt89ll3w0vnlgspu349h", &chaincfg.MainNetParams)
@@ -587,7 +587,7 @@ func (w *BitcoindWallet) EstimateSpendFee(amount int64, feeLevel wallet.FeeLevel
 	return uint64(inval - outval), err
 }
 
-// CreateMultisigSignature function creates a signature for a multisig transaction
+// CreateMultisigSignature type definition creates a signature for a multisig transaction
 func (w *BitcoindWallet) CreateMultisigSignature(ins []wallet.TransactionInput, outs []wallet.TransactionOutput, key *hd.ExtendedKey, redeemScript []byte, feePerByte uint64) ([]wallet.Signature, error) {
 	var sigs []wallet.Signature
 	tx := wire.NewMsgTx(1)
@@ -640,7 +640,7 @@ func (w *BitcoindWallet) CreateMultisigSignature(ins []wallet.TransactionInput, 
 	return sigs, nil
 }
 
-// Multisign function combines signatures and optionally broadcasts
+// Multisign type definition combines signatures and optionally broadcasts
 func (w *BitcoindWallet) Multisign(ins []wallet.TransactionInput, outs []wallet.TransactionOutput, sigs1 []wallet.Signature, sigs2 []wallet.Signature, redeemScript []byte, feePerByte uint64, broadcast bool) ([]byte, error) {
 	tx := wire.NewMsgTx(1)
 	for _, in := range ins {
@@ -717,7 +717,8 @@ func (w *BitcoindWallet) Multisign(ins []wallet.TransactionInput, outs []wallet.
 	return buf.Bytes(), nil
 }
 
-// SweepAddress function builds and broadcasts a transaction that sweeps all coins from an address. If it is a p2sh multisig, the redeemScript must be included
+// SweepAddress builds and broadcasts a transaction that sweeps all coins from an address.
+// If it is a p2sh multisig, the redeemScript must be included
 func (w *BitcoindWallet) SweepAddress(utxos []wallet.Utxo, address *btc.Address, key *hd.ExtendedKey, redeemScript *[]byte, feeLevel wallet.FeeLevel) (*chainhash.Hash, error) {
 	var internalAddr btc.Address
 	if address != nil {
@@ -849,17 +850,14 @@ func (w *BitcoindWallet) SweepAddress(utxos []wallet.Utxo, address *btc.Address,
 	return &txid, nil
 }
 
-// Params function returns wallet parameters
 func (w *BitcoindWallet) Params() *chaincfg.Params {
 	return w.params
 }
 
-// AddTransactionListener function adds a callback for incoming transactions
 func (w *BitcoindWallet) AddTransactionListener(callback func(wallet.TransactionCallback)) {
 	w.listeners = append(w.listeners, callback)
 }
 
-// GenerateMultisigScript function generates the script for a multisig transaction
 func (w *BitcoindWallet) GenerateMultisigScript(keys []hd.ExtendedKey, threshold int, timeout time.Duration, timeoutKey *hd.ExtendedKey) (addr btc.Address, redeemScript []byte, err error) {
 	if uint32(timeout.Hours()) > 0 && timeoutKey == nil {
 		return nil, nil, errors.New("Timeout key must be non nil when using an escrow timeout")
@@ -925,7 +923,6 @@ func (w *BitcoindWallet) GenerateMultisigScript(keys []hd.ExtendedKey, threshold
 	return addr, redeemScript, nil
 }
 
-// AddWatchedScript function adds a script to the wallet and gets notifications back when coins are received or spent from it
 func (w *BitcoindWallet) AddWatchedScript(script []byte) error {
 	if !w.started {
 		w.scriptsToAdd = append(w.scriptsToAdd, script)
@@ -938,7 +935,6 @@ func (w *BitcoindWallet) AddWatchedScript(script []byte) error {
 	return w.rpcClient.ImportAddressRescan(addrs[0].EncodeAddress(), false)
 }
 
-// ReSyncBlockchain function re-downloads merkle blocks in case of missed transactions
 func (w *BitcoindWallet) ReSyncBlockchain(fromDate time.Time) {
 	w.rpcClient.RawRequest("stop", []json.RawMessage{})
 	w.rpcClient.Shutdown()
@@ -954,7 +950,6 @@ func (w *BitcoindWallet) ReSyncBlockchain(fromDate time.Time) {
 	w.rpcClient = client
 }
 
-// Close function cleanly disconnects from the wallet
 func (w *BitcoindWallet) Close() {
 	if w.rpcClient != nil {
 		w.rpcClient.RawRequest("stop", []json.RawMessage{})

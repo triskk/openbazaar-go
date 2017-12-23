@@ -1,5 +1,4 @@
 package bitcoin
-
 // ExchangeRates is an interface for retrieving currency exchange information
 type ExchangeRates interface {
 

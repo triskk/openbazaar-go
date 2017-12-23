@@ -3,6 +3,7 @@ package api
 import (
 	"bytes"
 	"encoding/json"
+
 	"github.com/OpenBazaar/jsonpb"
 	"github.com/golang/protobuf/proto"
 	"github.com/microcosm-cc/bluemonday"
@@ -14,6 +15,7 @@ func init() {
 	sanitizer = bluemonday.UGCPolicy()
 }
 
+// SanitizeJSON type definition cleans up formatting
 func SanitizeJSON(s []byte) ([]byte, error) {
 	d := json.NewDecoder(bytes.NewReader(s))
 	d.UseNumber()
@@ -28,6 +30,7 @@ func SanitizeJSON(s []byte) ([]byte, error) {
 	return json.MarshalIndent(i, "", "    ")
 }
 
+// SanitizeProtobuf type definition cleans up formatting
 func SanitizeProtobuf(jsonEncodedProtobuf string, m proto.Message) ([]byte, error) {
 	ret, err := SanitizeJSON([]byte(jsonEncodedProtobuf))
 	if err != nil {

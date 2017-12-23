@@ -3,7 +3,6 @@ package namesys
 import (
 	"context"
 	"errors"
-	"gx/ipfs/QmXYjuNuxVzXKJCfWasQk1RqkhVLDM9jtUKhqc2WPQmFSB/go-libp2p-peer"
 	"strings"
 	"time"
 )
@@ -16,6 +15,7 @@ var ErrNoResolver = errors.New("No resover for domain.")
 
 const cacheTTL = time.Minute
 
+// NameSystem type definition that is used to resolve domains to openbazaar IDs
 type NameSystem struct {
 	resolvers map[string]Resolver
 	cache     map[string]cachedName
@@ -26,6 +26,7 @@ type cachedName struct {
 	expiration time.Time
 }
 
+// NewNameSystem type defniition that is used to resolve IPFS naming based on routing
 func NewNameSystem(resolvers []Resolver) (*NameSystem, error) {
 	n := &NameSystem{
 		resolvers: make(map[string]Resolver),
@@ -39,6 +40,7 @@ func NewNameSystem(resolvers []Resolver) (*NameSystem, error) {
 	return n, nil
 }
 
+// Resolve type definition identifies system
 func (n *NameSystem) Resolve(ctx context.Context, name string) (pid peer.ID, err error) {
 	pid, err = peer.IDB58Decode(name)
 	if err == nil {
